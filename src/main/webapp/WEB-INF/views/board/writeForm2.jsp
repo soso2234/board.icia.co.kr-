@@ -4,6 +4,7 @@
 <html>
 <head>
 <%@ include file="/WEB-INF/views/include/head.jsp" %>
+<title>게시물 쓰기</title>
 <script type="text/javascript">
 $(document).ready(function() {
     
@@ -90,9 +91,9 @@ $(document).ready(function() {
 </script>
 </head>
 <body>
-<%@ include file="/WEB-INF/views/include/navigation.jsp" %>
+<%@ include file="/WEB-INF/views/include/teamNavigation.jsp" %>
 <div class="container">
-   <h2>게시물 쓰기</h2>
+   <h2 class="name">게시물 쓰기</h2>
    <form name="writeForm2" id="writeForm2" method="post" enctype="multipart/form-data">   <!-- 파일 업로드할 때 쓰는 타입 multipart/form-data-->
       <input type="text" name="userName2" id="userName2" maxlength="20" value="${user2.userName2}" style="ime-mode:active;" class="form-control mt-4 mb-2" placeholder="이름을 입력해주세요." readonly />
       <input type="text" name="userEmail2" id="userEmail2" maxlength="30" value="${user2.userEmail2}" style="ime-mode:inactive;" class="form-control mb-2" placeholder="이메일을 입력해주세요." readonly />
@@ -101,7 +102,7 @@ $(document).ready(function() {
          <textarea class="form-control" rows="10" name="qnaHiBbsContent" id="qnaHiBbsContent" style="ime-mode:active;" placeholder="내용을 입력해주세요" required></textarea>
       </div>
       <input type="file" id="qnaHiBbsFile" name="qnaHiBbsFile" class="form-control mb-2" placeholder="파일을 선택하세요." required />
-      <div class="form-group row">
+      <div class="btn-group">
          <div class="col-sm-12">
             <button type="button" id="btnWrite2" class="btn btn-primary" title="저장">저장</button>
             <button type="button" id="btnList2" class="btn btn-secondary" title="리스트">리스트</button>

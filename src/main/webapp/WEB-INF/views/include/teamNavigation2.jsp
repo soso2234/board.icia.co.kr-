@@ -15,11 +15,6 @@
       <a class="nav-link" href="/">
       <img src="/resources/images/travel.png" width="50" height="50" alt="" loading="lazy"></a>
       </div>
-       <ul class="nav navbar-nav navbar-right">
-         <li class="nav-item">
-            <a class="nav-link" href="/">x</a>
-         </li>
-       </ul>
      </div>
    </nav>
   </html>

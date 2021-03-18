@@ -7,6 +7,7 @@ public class PlanMake implements Serializable {
    private static final long serialVersionUID = 1L;
    
    private long pNoSeq;
+   private long pNoSeq2;
    private String userId2;
    private String pTitle;
    private String regDate2;
@@ -19,13 +20,22 @@ public class PlanMake implements Serializable {
    public PlanMake()
    {
       pNoSeq=0;
+      pNoSeq2=0;
       userId2="";
       pTitle="";
       regDate2="";
       pStart="";
       pEnd="";
    }
+   
+   public long getpNoSeq2() {
+      return pNoSeq2;
+   }
 
+   public void setpNoSeq2(long pNoSeq2) {
+      this.pNoSeq2 = pNoSeq2;
+   }
+   
 public long getpNoSeq() {
    return pNoSeq;
 }

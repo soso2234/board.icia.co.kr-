@@ -8,27 +8,36 @@
 <title>관리자 로그인</title>
 <script type="text/javascript">
 $(document).ready(function() {
-  
+   
    $("#adminId").focus();
    
    $("#adminId").on("keypress", function(e){
+      
       if(e.which == 13)
       {   
          fn_loginCheck();
       }
+      
    });
    
    $("#adminPwd").on("keypress", function(e){
+      
       if(e.which == 13)
       {
          fn_loginCheck();
       }
+      
    });
       
-   $("#btnAdmin").on("click", function() { 
-      fn_loginCheck();  
+   $("#btnAdmin").on("click", function() {
+      
+      fn_loginCheck();
+      
    });
    
+   $("#btnReg").on("click", function() {
+      location.href = "/user/regForm2";
+   });
    
 });
 
@@ -70,6 +79,7 @@ function fn_loginCheck()
          
          if(code == 0)
          {
+            alert("로그인 완료");
             location.href = "/admin/adminHome"; //관리자페이지
          }
          else
@@ -116,15 +126,17 @@ function fn_loginCheck()
 </script>
 
 <body>
+<br><br>
 <div class="container">
    <form class="form-signin">
-       <h2 class="form-signin-heading m-b3">로그인</h2>
+       <h2 class="list">로그인</h2>
       <label for="adminId" class="sr-only">아이디</label>
       <input type="text" id="adminId" name="adminId" class="form-control" maxlength="20" placeholder="아이디">
       <label for="adminPwd" class="sr-only">비밀번호</label>
       <input type="password" id="adminPwd" name="adminPwd" class="form-control" maxlength="20" placeholder="비밀번호">
-          
+        
       <button type="button" id=btnAdmin class="btn btn-lg btn-primary btn-block">로그인</button>
+
    </form>
 </div>
 </body>

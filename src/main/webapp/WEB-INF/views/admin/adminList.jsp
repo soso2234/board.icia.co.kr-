@@ -15,20 +15,24 @@
         <br>
          <h2 class="list" style="text-align: center">회원 목록 </h2>
          <tr>
-         <td><button class="deleteBtn"><a href = "${path}/admin/adminDelete">강제탈퇴</a></button></td>
+         <td><div class=btn-group2><button class="btn"><a href = "${path}/admin/adminDelete">강제탈퇴</a></button></div></td>
          </tr>
          <tr style="background-color: #bacad6;" >
             <th>아이디</th>
             <th>비밀번호</th>
             <th>회원명</th>
             <th>이메일</th>
+            <th>성별</th>            
+            <th>등록일</th>
          </tr>
          <c:forEach var = "row" items = "${list}">
-         <tr class="readLine" style="background-color: #fcfcfc;">
+         <tr class="readLine text-center" style="background-color: #fcfcfc;">
             <td>${row.userId2}</td>
             <td>${row.userPwd2}</td>
             <td>${row.userName2}</td>
             <td>${row.userEmail2}</td>
+            <td>${row.gender2}</td>
+            <td>${row.regDate2}</td>
          </tr>
          </c:forEach>
    </table>

@@ -23,7 +23,7 @@ public interface AdminDao {
    public void insertAdmin(Admin admin);
    
    //회원 삭제
-   void adminDelete(Admin admin) throws Exception;
+   void adminDelete(Admin admin);
    /********여기부터 게시판임*****/
    //동행 게시판 불러오기
    public List<Admin> testList(Admin admin);
@@ -31,7 +31,7 @@ public interface AdminDao {
    //동행게시판 게시물 조회
    public Admin testSelect(long hiBbsSeq);
    
-   //동행게시판 게시물 답글 조회
+   //동행게시판 게시물 댓글 조회
    public List<Admin> testReplyList(Admin admin);
    
    //동행게시판 뷰
@@ -39,6 +39,9 @@ public interface AdminDao {
    
    //동행게시판 게시물 삭제
    public int adminListDelete(long hiBbsSeq);
+   
+   //동행게시판 게시물 댓글 삭제
+   public int adminReplyDelete(Admin admin);
 
    //고객센터 게시판 불러오기
    public List<Admin> qList(Admin admin);
@@ -52,5 +55,7 @@ public interface AdminDao {
   //고객센터 답글 등록
    public int adminReplyInsert(Admin admin);
    
+   public Admin userSelect(String userId2);
    
+   public int userDelete(String userId2);
 }

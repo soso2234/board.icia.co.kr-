@@ -1,9 +1,10 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-<%@ include file="/WEB-INF/views/include/taglib.jsp" %>
+<%@ include file="/WEB-INF/views/include/taglib2.jsp" %>
 <!DOCTYPE html>
 <html>
 <head>
 <%@ include file="/WEB-INF/views/include/head.jsp" %>
+<title>게시물쓰기</title>
 <script type="text/javascript">
 $(document).ready(function() {
     
@@ -90,18 +91,26 @@ $(document).ready(function() {
 </script>
 </head>
 <body>
-<%@ include file="/WEB-INF/views/include/navigation.jsp" %>
+<%@ include file="/WEB-INF/views/include/teamNavigation.jsp" %>
 <div class="container">
-   <h2>게시물 쓰기</h2>
+   <h2 class="name">게시물 쓰기</h2>
    <form name="writeForm2" id="writeForm2" method="post" enctype="multipart/form-data">   <!-- 파일 업로드할 때 쓰는 타입 multipart/form-data-->
       <input type="text" name="userName2" id="userName2" maxlength="20" value="${user2.userName2}" style="ime-mode:active;" class="form-control mt-4 mb-2" placeholder="이름을 입력해주세요." readonly />
       <input type="text" name="userEmail2" id="userEmail2" maxlength="30" value="${user2.userEmail2}" style="ime-mode:inactive;" class="form-control mb-2" placeholder="이메일을 입력해주세요." readonly />
       <input type="text" name="hiBbsTitle" id="hiBbsTitle" maxlength="100" style="ime-mode:active;" class="form-control mb-2" placeholder="제목을 입력해주세요." required />
+      <textarea id="plan" name="plan" cols="100" rows="7" style="ime-mode:active;" class="form-control mb-2" readonly>
+               일정
+		<c:if test="${!empty planlist}">                       
+		   <c:forEach var="planDate" items="${planlist}" varStatus="status">   
+		    ${planDate.pDay} ${planDate.pPlace}
+		    </c:forEach>
+		</c:if>
+      </textarea>
       <div class="form-group">
          <textarea class="form-control" rows="10" name="hiBbsContent" id="hiBbsContent" style="ime-mode:active;" placeholder="내용을 입력해주세요" required></textarea>
       </div>
       <input type="file" id="hiBbsFile" name="hiBbsFile" class="form-control mb-2" placeholder="파일을 선택하세요." required />
-      <div class="form-group row">
+      <div class="btn-group">
          <div class="col-sm-12">
             <button type="button" id="btnWrite" class="btn btn-primary" title="저장">저장</button>
             <button type="button" id="btnList" class="btn btn-secondary" title="리스트">리스트</button>

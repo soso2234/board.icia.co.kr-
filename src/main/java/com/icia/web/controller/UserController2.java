@@ -101,7 +101,8 @@ public class UserController2
    @RequestMapping(value="/user/regForm2", method=RequestMethod.GET)
    public String regForm2(HttpServletRequest request, HttpServletResponse response)
    {
-      String cookieUserId = CookieUtil.getHexValue(request, AUTH_COOKIE_NAME);
+      String cookieUserId = CookieUtil.getHexValue(request, AUTH_COOKIE_NAME);            
+      
       
       if(!StringUtil.isEmpty(cookieUserId))
       {
@@ -132,6 +133,7 @@ public class UserController2
    {
       String userId2 = HttpUtil.get(request, "userId2");
       String userPwd2 = HttpUtil.get(request, "userPwd2");
+      String userPwd3 = HttpUtil.get(request, "userPwd3");
       String userName2 = HttpUtil.get(request, "userName2");
       String userEmail2 = HttpUtil.get(request, "userEmail2");
       //스테터스 ? 
@@ -141,7 +143,7 @@ public class UserController2
       
       Response<Object> ajaxResponse = new Response<Object>();
       
-      if(!StringUtil.isEmpty(userId2) && !StringUtil.isEmpty(userPwd2) && !StringUtil.isEmpty(userName2) && !StringUtil.isEmpty(userEmail2)
+      if(!StringUtil.isEmpty(userId2) && !StringUtil.isEmpty(userPwd2) && !StringUtil.isEmpty(userPwd3) && !StringUtil.isEmpty(userName2) && !StringUtil.isEmpty(userEmail2)
             && !StringUtil.isEmpty(gender2) && !StringUtil.isEmpty(userBirth2))
       {
          if(userService2.userSelect2(userId2) == null) //중복체크
@@ -150,6 +152,7 @@ public class UserController2
             
             user2.setUserId2(userId2);
             user2.setUserPwd2(userPwd2);
+            user2.setUserPwd3(userPwd3);
             user2.setUserName2(userName2);
             user2.setUserEmail2(userEmail2);
             user2.setStatus2("Y");
@@ -293,7 +296,7 @@ public class UserController2
       String cookieUserId2 = CookieUtil.getHexValue(request, AUTH_COOKIE_NAME);
       String userPwd2 = HttpUtil.get(request, "userPwd2");
       String userName2 = HttpUtil.get(request, "userName2");
-      String userEmail2 = HttpUtil.get(request, "userEmail2");
+
       
       Response<Object> ajaxResponse = new Response<Object>();
       
@@ -305,11 +308,11 @@ public class UserController2
          {
             if(StringUtil.equals(user2.getStatus2(), "Y"))
             {
-               if(!StringUtil.isEmpty(userPwd2) && !StringUtil.isEmpty(userName2) && !StringUtil.isEmpty(userEmail2))
+               if(!StringUtil.isEmpty(userPwd2) && !StringUtil.isEmpty(userName2))
                {
                   user2.setUserPwd2(userPwd2);
                   user2.setUserName2(userName2);
-                  user2.setUserEmail2(userEmail2);
+
                   
                   if(userService2.userUpdate2(user2) > 0)
                   {

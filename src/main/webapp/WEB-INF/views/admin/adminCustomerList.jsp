@@ -5,6 +5,7 @@
 <html>
 
 <%@ include file="/WEB-INF/views/include/head.jsp" %> 
+<title>고객센터</title>
 <script type="text/javascript">
 $(document).ready(function() {
     
@@ -56,10 +57,11 @@ function popup(){
 <body>
 <%@ include file="/WEB-INF/views/include/adminNavigation.jsp" %>
 <div class="container">
-   
-   <div class="blueone">
+
+<!-- 위 테이블 조회항목 --> 
+   <div class="d-flex">
       <div style="width:50%;">
-         <h2>고객센터</h2>
+         <h2 class="list">고객센터</h2>
       </div>
       <div class="ml-auto input-group" style="width:50%;">
          <select name="_searchType" id="_searchType" class="custom-select" style="width:auto;">
@@ -75,20 +77,41 @@ function popup(){
       </div>
     </div>
     
+ <!-- 게시판 table head-->     
    <table class="table table-hover">
       <thead>
       <tr class="blueone" style="background-color: #bacad6;">
-         <th scope="col" class="text-center" style="width:10%">번호</th>
-         <th scope="col" class="text-center" style="width:55%">제목</th>
+         <th scope="col" class="text-center" style="width:15%">번호</th>
+         <th scope="col" class="text-center" style="width:40%">제목</th>
          <th scope="col" class="text-center" style="width:10%">작성자</th>
          <th scope="col" class="text-center" style="width:15%">날짜</th>
          <th scope="col" class="text-center" style="width:10%">조회수</th>
       </tr>
       </thead>
       <tbody>
+      
+<!-- 게시판 -->
 <c:if test="${!empty adminCustomerList}">   
    <c:forEach var="admin" items="${adminCustomerList}" varStatus="status">   
-      <tr>
+   <c:choose>
+   <c:when test="${admin.qnaHiBbsSeq eq 9999}">
+         <tr>
+         <td class="text-center">공지사항</td>
+         <td>
+            <a href="javascript:void(0)" onclick="fn_view(${admin.qnaHiBbsSeq})">
+      <c:if test="${admin.qnaHiBbsIndent > 0}">
+         <img src="/resources/images/icon_reply.gif" style="margin-left: ${admin.qnaHiBbsIndent}em;"/>
+      </c:if>
+               <c:out value="${admin.qnaHiBbsTitle}" />
+            </a>
+         </td>
+         <td class="text-center"><c:out value="${admin.userName2}" /></td>
+            <td class="text-center">${admin.regDate}</td>
+         <td class="text-center"><fmt:formatNumber type="number" maxFractionDigits="3" value="${admin.qnaHiBbsReadCnt}" /></td>
+      </tr>
+   </c:when> 
+   <c:otherwise>
+         <tr>
          <td class="text-center">${admin.qnaHiBbsSeq}</td>
          <td>
             <a href="javascript:void(0)" onclick="fn_view(${admin.qnaHiBbsSeq})">
@@ -102,8 +125,11 @@ function popup(){
             <td class="text-center">${admin.regDate}</td>
          <td class="text-center"><fmt:formatNumber type="number" maxFractionDigits="3" value="${admin.qnaHiBbsReadCnt}" /></td>
       </tr>
+   </c:otherwise>
+   </c:choose>
    </c:forEach>
 </c:if>
+ <!-- 페이징 처리 -->  
       </tbody>
       <tfoot>
       <tr>
@@ -117,7 +143,7 @@ function popup(){
    <c:if test="${paging.prevBlockPage gt 0 }">
          <li class="page-item"><a class="page-link" href="javascript:void(0)" onclick="fn_list(${paging.prevBlockPage})">이전블럭</a></li>
    </c:if>
-   
+ 
    <c:forEach var="i" begin="${paging.startPage}" end="${paging.endPage}">
       <c:choose>
          <c:when test="${i ne curPage}">

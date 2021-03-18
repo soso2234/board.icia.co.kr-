@@ -7,14 +7,14 @@
 <script>
 $(document).ready(function() {
     
-      $("#modalsend").on("click", function() {
+	   $("#modalsend").on("click", function() {
 
          //값 보내기, 창 닫기
           document.qna.submit();
          self.close();
-            
-      });
-   });
+	         
+	   });
+	});
 
 
 
@@ -91,16 +91,16 @@ $(document).ready(function() {
                 <p style="text-align: center; line-height: 1.5;"><span style="font-size: 14pt;">문의사항을 적어주세요</span></p>
                 
                 <div class="mb-3">
-                 <label for="message-text" class="col-form-label">Message:</label>
-                 <textarea class="form-control" id="messageText"></textarea>
-              </div>
+		           <label for="message-text" class="col-form-label">Message:</label>
+		           <textarea class="form-control" id="messageText"></textarea>
+		        </div>
                 
                 <div style="cursor:pointer;background-color:#FFDA29;text-align: center;padding-bottom: 10px;padding-top: 10px;" id=modalsend onClick="close_pop();">
                 <span class="pop_bt" style="font-size: 13pt;" >
                      전송
                 </span>
                 </div>
-               <div style="cursor:pointer;background-color:#DDDDDD;text-align: center;padding-bottom: 10px;padding-top: 10px;" onClick="close_pop();">
+            	<div style="cursor:pointer;background-color:#DDDDDD;text-align: center;padding-bottom: 10px;padding-top: 10px;" onClick="close_pop();">
                 <span class="pop_bt" style="font-size: 13pt;" >
                      닫기
                 </span>

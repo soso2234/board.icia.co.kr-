@@ -54,7 +54,7 @@ public class PlanMakeService {
       return planMake;
    }
    
-   //일정 삭제[보류]
+  
    
    public List<PlanMake> planList(PlanMake planMake) {
       List<PlanMake> planlist = null;
@@ -72,4 +72,21 @@ public class PlanMakeService {
    
    }
 
+   public int planDelete(long pNoSeq2)
+   {
+      int count = 0;
+      
+      try
+      {
+         count = planMakeDao.planDelete(pNoSeq2);
+      }
+      catch(Exception e)
+      {
+         logger.error("[PlanMakeService] planDelete Exception", e);
+      }
+      
+      return count;
+   }
+   
+   
 }

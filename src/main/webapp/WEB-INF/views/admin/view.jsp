@@ -8,6 +8,7 @@
 <!DOCTYPE html>
 <html>
 <%@ include file="/WEB-INF/views/include/head.jsp" %>
+<title>게시물 보기</title>
 <script type="text/javascript">
 $(document).ready(function() {
 <c:choose>
@@ -77,7 +78,60 @@ $(document).ready(function() {
          });
       }
    });
-   
+   $("#btnReplyDelete ").on("click", function(){
+      
+       if(confirm("댓글을 삭제 하시겠습니까?") == true)
+      {
+         $.ajax({
+            type : "POST",
+            url : "/admin/adminReplyDelete",
+            data : {
+               //hiBbsSeq : <c:out value="${hiBoard.hiBbsSeq}" />
+               hiBbsSeq : document.getElementById("btnReplyDelete").value
+            },
+            datatype : "JSON",
+            beforeSend : function(xhr){
+                  xhr.setRequestHeader("AJAX", "true");
+              },
+            success : function(response) {
+               // var data = JSON.parse(obj);
+
+               if(response.code == 0)
+               {
+                  alert("댓글이 삭제되었습니다.");
+                  location.reload = "/admin/view";
+                  setTimeout('location.reload()',1000); 
+               }
+               else if(response.code == 400)
+               {
+                  alert("파라미터 값이 올바르지 않습니다.");
+               }
+               else if(response.code == 404)
+               {
+                  alert("댓글을 찾을수 없습니다.");
+                  location.href = "/board/view";
+               }
+               else if(response.code == -999)
+                 {
+                    alert("답변 게시물이 존재하여 삭제할 수 없습니다.");
+                 }
+               else
+               {
+                  alert("댓글 삭제중 오류가 발생하였습니다.");
+               }   
+            },
+            complete : function(data) 
+            {
+               // 응답이 종료되면 실행, 잘 사용하지않는다
+               icia.common.log(data);
+            },
+            error : function(xhr, status, error) 
+            {
+               icia.common.error(error);
+            }
+         });
+      } 
+   });
    </c:otherwise>
 </c:choose>   
 });
@@ -89,14 +143,21 @@ $(document).ready(function() {
 <c:if test="${!empty admin}">
 <%@ include file="/WEB-INF/views/include/adminNavigation.jsp" %>
 <div class="container">
-   <h2>게시물 보기</h2>
+   <h2 class="list">게시물 보기</h2>
    <div class="row" style="margin-right:0; margin-left:0;">
       <table class="table">
          <thead>
             <tr class="table-active" style="color:#939597">
                <th scope="col" style="width:60%">
                   <c:out value="${admin.hiBbsTitle}" /><br/>
-                  <c:out value="${admin.userName2}" />&nbsp;&nbsp;&nbsp;
+                  <c:out value="${admin.userName2}" />
+                  <c:if test="${admin.gender eq 'M'}">
+                  <span><img src="/resources/images/boy.png"></span>
+                  </c:if>
+                  <c:if test="${admin.gender eq 'W'}">
+                  <span><img src="/resources/images/girl.png"></span>
+                  </c:if>
+                  &nbsp;&nbsp;&nbsp;
                   <a href="mailto:${admin.userEmail}" style="color:#828282;">${admin.userEmail}</a>
                 
                </th>
@@ -107,8 +168,17 @@ $(document).ready(function() {
             </tr>
          </thead>
          <tbody>
+         <tr>
+               <td>
+               <c:if test="${!empty hiBoard.plan}">
+                  <textarea id="plan" name="plan" cols="100" rows="7" style="ime-mode:active;" class="form-control mb-2" readonly>
+                     <c:out value="${admin.plan}" />
+                  </textarea>
+               </c:if>   
+               </td>
+            </tr>         
             <tr>
-               <td colspan="2"><pre><c:out value="${admin.hiBbsContent}" /></pre></td>
+               <td colspan="2"><pre class="name1"><c:out value="${admin.hiBbsContent}" /></pre></td>
             </tr>
          </tbody>
          <tfoot>
@@ -123,28 +193,35 @@ $(document).ready(function() {
      <table class="table table-hover">
       <thead>
       <tr style="background-color: #dee2e6;">
-         <th scope="col" class="text-center" style="width:50%">댓글</th>
+         
+<c:if test="${empty replylist }">
+<tr>
+
+         <p class="text-center">댓글없음</p>
+
+      </tr>
+</c:if>     
+<c:if test="${!empty replylist}">
+<th scope="col" class="text-center" style="width:50%">댓글</th>
          <th scope="col" class="text-center" style="width:20%">작성자</th>
          <th scope="col" class="text-center" style="width:19%"></th><!-- 날짜 -->
          <th scope="col" class="text-center" style="width:11%"></th>
       </tr>
       </thead>
       <tbody>
-     
-<c:if test="${!empty replylist}">
    <c:forEach var="admin" items="${replylist}" varStatus="status"> 
       <c:if test="${admin.hiBbsParent eq admin.hiBbsGroup}"> 
       <tr>
          <td>
          
-         <img src="/resources/images/icon_reply.gif" style="margin-left: ${hiBoard.hiBbsIndent}em;"/>
+         <img src="/resources/images/icon_reply.gif" style="margin-left: ${admin.hiBbsIndent}em;"/>
       
                <c:out value="${admin.hiBbsContent}" />
             
          </td>
          <td class="text-center"><c:out value="${admin.userEmail}" /></td>
          <td class="text-center">${admin.regDate}</td>
-          <td><button id="btnReplyDelete" class="btn btn-secondary">댓글 삭제</button></td>
+          <td><div class=btn-group2><button id="btnReplyDelete" class="btn btn-secondary" value="${admin.hiBbsSeq}">댓글 삭제</button></div></td>
       </tr>
      </c:if>
    </c:forEach>

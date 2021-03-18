@@ -2,41 +2,46 @@
     pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
+<%@ include file="/WEB-INF/views/include/head.jsp"%>
 <head>
 <meta charset="UTF-8">
-<title>Insert title here</title>
+<title>이메일 인증</title>
 </head>
 <body>
  
-<table border="1" width="300" height="300" align= "center">
+<table border="2" width="300" height="300" align= "center">
+
 <center>
-<span style="color: green; font-weight: bold;">입력한 이메일로 받은 인증번호를 입력하세요. (인증번호가 맞아야 다음 단계로 넘어가실 수 있습니다.)</span> <br> <br>    
-        <br> <br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<span style="color: black; font-weight: bold; font-size:x-large">인증번호를 입력하세요.</span> 
+      <br> 
+      <br>    
+
         
-        
-        <div style="text-align:center;">
-            <tr>        
+            <tr style="text-align:center;">        
                 <td>
-                <center>
+                
+                    
                     <form action="/member/join_injeung.do${dice}" method="post">                
-                    <center>
-                        <br>
-                        <div>
-                            인증번호 입력 : <input type="number" name="email_injeung"
-                                placeholder="  인증번호를 입력하세요. ">
+                        <div style="color:black">
+                            인증번호 : <input type="number" name="email_injeung"
+                                placeholder="인증번호를 입력하세요.">
                         </div>                                        
- 
-                        <br> <br>
-                        <button type="submit" name="submit">인증번호 전송</button>
-                   
-                        </div>
-                    </td>
+                      <input type="hidden" id="tomail" name="tomail" value="${tomail}" />
+                        <br>
+                        <br>
+                      <button class="btn btn-outline-warning" type="submit" name="submit">인증번호 전송</button>
+                    </form>
+                  </td>
                 </tr>
-                    </center>
-            </table>
-        </form>
 </center>
- 
+</table>
+
  
 </body>
 </html>

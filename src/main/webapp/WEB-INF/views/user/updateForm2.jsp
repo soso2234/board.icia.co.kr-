@@ -4,8 +4,8 @@
 
 <!DOCTYPE html>
 <html>
-<title>회원정보 수정</title>
 <%@ include file="/WEB-INF/views/include/head.jsp" %>
+<title>회원정보수정</title>
 <script type="text/javascript">
 $(document).ready(function() {
 
@@ -52,13 +52,7 @@ $(document).ready(function() {
          $("#userName2").focus();
          return;
       }
-      
-      if(!fn_validateEmail($("#userEmail2").val()))
-      {
-         alert("사용자 이메일 형식이 올바르지 않습니다.");
-         $("#userEmail2").focus();
-         return;   
-      }
+
       
       $("#userPwd2").val($("#userPwd4").val());
       
@@ -128,37 +122,56 @@ function fn_validateEmail(value)
 <%@ include file="/WEB-INF/views/include/teamNavigation.jsp" %>
 <div class="container">
     <div  class="form-group">
-       <h1>회원정보수정</h1>
+       <h1 class="name">회원정보수정</h1>
     </div>
+    <br>
     <div class="row mt-2">
         <div class="col-12">
             <form>
-                <div class="form-group">
-                    <label for="username">사용자 아이디</label>
-                    ${user2.userId2}
-                </div>
-                <div class="form-group">
+                <span class="form-group" style="color:#63615e">
+                    <label for="username">사용자 아이디 : </label>
+                    <h style="color:black">${user2.userId2}</h>
+                </span><br>
+                <span class="form-group" style="color:#63615e">
+                    <label for="userEmail">사용자 이메일 : </label>
+                    <h style="color:black">${user2.userEmail2}</h>
+                </span><br>
+                <span class="form-group" style="color:#63615e">
+                    <label for="gender2">사용자 성별 : </label>
+                    <h style="color:black">
+                    <c:if test="${user2.gender2 eq 'W'}">
+                     <span>여자</span>
+                    </c:if>
+                    <c:if test="${user2.gender2 eq 'M'}">
+                     <span>남자</span>
+                    </c:if>
+                     </h>
+                </span><br>
+                <span class="form-group" style="color:#63615e">
+                    <label for="userBirth2">사용자 생년월일 : </label>
+                    <h style="color:black">${user2.userBirth2}</h>
+                </span><br>
+                <br>
+                <div class="form-group" style="color:#63615e">
                     <label for="username2">비밀번호</label>
                     <input type="password" class="form-control" id="userPwd4" name="userPwd4" value="${user2.userPwd2}" placeholder="비밀번호" maxlength="12" />
                 </div>
-                <div class="form-group">
+                <div class="form-group" style="color:#63615e">
                     <label for="username2">비밀번호 확인</label>
                     <input type="password" class="form-control" id="userPwd5" name="userPwd5" value="${user2.userPwd2}" placeholder="비밀번호 확인" maxlength="12" />
                 </div>
-                <div class="form-group">
+                <div class="form-group" style="color:#63615e">
                     <label for="username2">사용자 이름</label>
                     <input type="text" class="form-control" id="userName2" name="userName2" value="${user2.userName2}" placeholder="사용자 이름" maxlength="15" />
-                </div>
-                <div class="form-group">
-                    <label for="username2">사용자 이메일</label>
-                    <input type="text" class="form-control" id="userEmail2" name="userEmail2" value="${user2.userEmail2}" placeholder="사용자 이메일" maxlength="30" />
                 </div>
                 <input type="hidden" id="userId2" name="userId2" value="${user2.userId2}" />
                 <input type="hidden" id="userPwd2" name="userPwd2" value="" />
                 <div class="form-group">
+                    <br>
                    <div class="btn-group">
+
                 <button type="button" id="btnUpdate" class="btn btn-primary">수정</button>
-                	</div>
+                   </div>
                 </div>
                 
             </form>

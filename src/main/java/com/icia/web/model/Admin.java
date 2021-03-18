@@ -1,7 +1,5 @@
 package com.icia.web.model;
 
-import java.io.Serializable;
-
 public class Admin {
    
    private static final long serialVersionUID = 1L;
@@ -13,6 +11,7 @@ public class Admin {
    private String userPwd2;
    private String userName2;
    private String userEmail2;
+   private String regDate2;
    
    private long hiBbsSeq;            //게시물 번호
    private String userId;               //사용자 아이디
@@ -24,12 +23,15 @@ public class Admin {
    private int hiBbsReadCnt;         //게시물 조회수
    //private String regDate;            //등록일
    private long hiBbsParent;         //부모 게시물 번호
-   
+   private String plan;   
    private String userName;         //사용자 이름
    private String userEmail;         //사용자 이메일
+   private String gender;            //사용자 성별
+   private String gender2;            //사용자 성별
    
-   
-   private long qnaHiBbsSeq;      //게시물 번호
+
+
+private long qnaHiBbsSeq;      //게시물 번호
    //private String userId;   //사용자 아이디
    private long qnaHiBbsGroup;   //게시물 그룹번호
    private int qnaHiBbsOrder;      //게시물 그룹내 순서
@@ -49,6 +51,7 @@ public class Admin {
       userPwd2="";
       userName2="";      
       userEmail2="";        
+      regDate2 = "";
       
       hiBbsSeq=0;            
       userId="";               
@@ -60,6 +63,7 @@ public class Admin {
       hiBbsReadCnt=0;         
      //regDate="";     
       hiBbsParent=0;
+      plan = "";
       
       userName ="";   //사용자 이름
       userEmail = "";   //사용자이메일   
@@ -75,8 +79,39 @@ public class Admin {
       //qnaHiBoardFile = null; //첨부파일
       qnaHiBbsParent = 0;
    }
+   public String getRegDate2() {
+      return regDate2;
+   }
+
+   public void setRegDate2(String regDate2) {
+      this.regDate2 = regDate2;
+   }
+
+   public String getGender2() {
+      return gender2;
+   }
+
+   public void setGender2(String gender2) {
+      this.gender2 = gender2;
+   }
    
-   /*adminId, adminPwd getter/setter*/
+   public String getGender() {
+   return gender;
+}
+
+public void setGender(String gender) {
+   this.gender = gender;
+}
+
+   public String getPlan() {
+   return plan;
+}
+
+public void setPlan(String plan) {
+   this.plan = plan;
+}
+
+/*adminId, adminPwd getter/setter*/
    public String getAdminId() {
       return adminId;
    }

@@ -6,6 +6,7 @@
 <%@ include file="/WEB-INF/views/include/head.jsp" %>
 <!-- navigation -->
 <%@ include file="/WEB-INF/views/include/teamNavigation2.jsp" %>
+<title>로그인</title>
 <script type="text/javascript">
 $(document).ready(function() {
    
@@ -123,11 +124,20 @@ function fn_loginCheck()
    });
 
 }
+
+//function mainHome()
+//{
+   //location.href = "/user/regForm2";   
+//}
+
 </script>
+
 <body>
+<br>
+<br>
 <div class="container">
    <form class="form-signin">
-       <h2 class="form-signin-heading m-b3">로그인</h2>
+       <h2 class="name">로그인</h2>
        
       <label for="userId2" class="sr-only">아이디</label>
       <input type="text" id="userId2" name="userId2" class="form-control" maxlength="20" placeholder="아이디">
@@ -136,7 +146,16 @@ function fn_loginCheck()
       <input type="password" id="userPwd2" name="userPwd2" class="form-control" maxlength="20" placeholder="비밀번호">
         
       <button type="button" id="btnLogin" class="btn btn-lg btn-primary btn-block">로그인</button>
-      <div class="caption"><a href="#">Forgot Password?</a></div>
+      <br>
+      <!-- ############################################# -->
+
+      <!-- ############################################# -->
+      <div style="text-align:center">
+      아직 회원이 아니신가요? <a href="http://travel.icia.co.kr:8088/user/regForm2" style="text-decoration:underline">회원가입</a>
+      </div>
+      
+      <!--  <button type="button" id="btnLogin" class="btn btn-lg btn-primary btn-block" onclick="mainHome()">회원가입</button>-->
+   
    </form>
 </div>
 </body>

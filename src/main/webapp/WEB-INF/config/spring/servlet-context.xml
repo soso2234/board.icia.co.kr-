@@ -61,22 +61,36 @@
                <constructor-arg> <!-- 인증체크 제외 URL 설정 -->
                   <list>
                      <value>/index</value>
-                     <value>/admin/index</value>
-                     <value>/admin/adminHome</value>
                      <value>/mainHome</value>
                      <value>/member/email</value>
                      <value>/member/join_injeung</value>
                      <value>/member/auth.do</value>
+                     
                      <value>/board/list</value>
                      <value>/board/customerList</value>
                      <value>/board/view</value>
+                     
                      <value>/user/login2</value>
                      <value>/user/loginOut2</value>
                      <value>/user/regForm2</value>
                      <value>/user/regProc2</value>
                      <value>/user/idCheck2</value>
+                     
                      <value>/admin/login2</value>
                      <value>/admin/logOut2</value>
+                     <value>/admin/index</value>
+                     <value>/admin/adminHome</value>
+                     
+                     <value>/travel/design/jeju</value> 
+                     <value>/travel/design/busan</value> 
+                     <value>/travel/design/incheon</value> 
+                     <value>/travel/design/seoul</value> 
+                     <value>/travel/design/gyeongju</value> 
+                     <value>/travel/design/gapyeong</value> 
+                     <value>/travel/design/banner1</value> 
+                     <value>/travel/design/banner2</value> 
+                     <value>/travel/design/useMethod</value> 
+                     
                   </list>
                </constructor-arg>
             </bean>

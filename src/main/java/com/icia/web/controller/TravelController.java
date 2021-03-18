@@ -74,4 +74,21 @@ public class TravelController {
       return "/travel/design/seoul";
    }
    
+   @RequestMapping(value="/travel/design/banner1")
+   public String banner1(ModelMap model, HttpServletRequest request, HttpServletResponse response)
+   {
+      return "/travel/design/banner1";
+   }
+   
+   @RequestMapping(value="/travel/design/banner2")
+   public String banner2(ModelMap model, HttpServletRequest request, HttpServletResponse response)
+   {
+      return "/travel/design/banner2";
+   }
+   
+   @RequestMapping(value="/travel/design/useMethod")
+   public String UseMethod(ModelMap model, HttpServletRequest request, HttpServletResponse response)
+   {
+      return "/travel/design/useMethod";
+   }
 }

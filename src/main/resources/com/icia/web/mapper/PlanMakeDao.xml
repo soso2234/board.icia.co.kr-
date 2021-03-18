@@ -4,7 +4,7 @@
 
 <!-- resultMap 시작 -->
 <resultMap type="com.icia.web.model.PlanMake" id="planMakeResultMap">
-   <id column="P_NO_SEQ" property="pNoSeq" />
+   <id column="P_NO_SEQ" property="pNoSeq2" />
    <result column="USER_ID2" property="userId2" />
    <result column="P_TITLE" property="pTitle" />
      <result column="REG_DATE2" property="regDate2" />
@@ -57,13 +57,19 @@ SELECT
     M.P_TITLE,
     M.REG_DATE2,
     M.P_START,
-    M.P_END,
-    D.P_PLACE
+    M.P_END
 FROM
-    PLAN_MAKE M, PLAN_DATE D
+    PLAN_MAKE M
 WHERE M.USER_ID2 = #{userId2}
-  AND M.P_NO_SEQ = D.P_NO_SEQ2
+
 ORDER BY P_NO_SEQ DESC
 </select>
+
+
+<delete id="planDelete" parameterType="long">
+DELETE FROM PLAN_MAKE
+ WHERE P_NO_SEQ = #{value}
+</delete>
+
 
 </mapper>

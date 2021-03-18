@@ -18,7 +18,7 @@ INSERT INTO PLAN_DATE (
 ) VALUES (
     #{pNoSeq2},
     #{pDay},
-    #{pPlace},
+   	#{pPlace},
     #{userId2}
 )
 </insert>
@@ -33,7 +33,7 @@ SELECT
 FROM
     PLAN_DATE A, PLAN_MAKE B
 WHERE A.P_NO_SEQ2 = B.P_NO_SEQ
-  AND A.USER_ID2 = #{userId2}
+  AND A.P_NO_SEQ2 = #{pNoSeq2}
 </select>
 
 <select id="planList" parameterType="com.icia.web.model.PlanDate" resultMap="planDateResultMap">
@@ -53,5 +53,20 @@ WHERE M.USER_ID2 = #{userId2}
 ORDER BY P_DAY ASC
 </select>
 
+<select id="planViewList" parameterType="com.icia.web.model.PlanDate" resultMap="planDateResultMap">
+SELECT
+    NVL(D.P_NO_SEQ2, '') AS P_NO_SEQ2,
+    NVL(D.P_DAY, '') AS P_DAY,
+    NVL(D.P_PLACE, '') AS P_PLACE
+FROM PLAN_DATE D 
+WHERE USER_ID2 = #{userId2}
+  AND P_NO_SEQ2 = #{pNoSeq2}
+ORDER BY P_DAY ASC
+</select>
+
+<delete id="planDelete" parameterType="long">
+DELETE FROM PLAN_DATE
+ WHERE P_NO_SEQ2 = #{value}
+</delete>
 
 </mapper>

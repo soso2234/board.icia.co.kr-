@@ -22,7 +22,7 @@ $(document).ready(function() {
       document.bbsForm.searchType.value = $("#_searchType").val();
       document.bbsForm.searchValue.value = $("#_searchValue").val();
       document.bbsForm.curPage.value = "1";
-      document.bbsForm.action = "/board/list";
+      document.bbsForm.action = "/admin/list";
       document.bbsForm.submit();
       
    });
@@ -54,10 +54,10 @@ function popup(){
 <body>
 <%@ include file="/WEB-INF/views/include/adminNavigation.jsp" %>
 <div class="container">
-   
+ <!--  테이블 조회항목 -->  
    <div class="d-flex">
       <div style="width:50%;">
-         <h2>게시판</h2>
+         <h2 class="list">동행게시판</h2>
       </div>
       <div class="ml-auto input-group" style="width:50%;">
          <select name="_searchType" id="_searchType" class="custom-select" style="width:auto;">
@@ -73,6 +73,7 @@ function popup(){
       </div>
     </div>
     
+  <!-- 게시판 table head-->     
    <table class="table table-hover">
       <thead>
       <tr class="blueone" style="background-color: #bacad6;">
@@ -84,17 +85,29 @@ function popup(){
       </tr>
       </thead>
       <tbody>
-
+<!-- 게시판 -->
 <c:if test="${!empty list}">   
    <c:forEach var="admin" items="${list}" varStatus="status">  
          <c:if test="${admin.hiBbsIndent == 0}"> 
+         <c:choose>
+      <c:when test="${admin.hiBbsSeq eq 9999}"> 
+      <tr>
+      <th class="text-center">공지사항</th>
+               <td>
+            <a href="javascript:void(0)" onclick="fn_view(${admin.hiBbsSeq})">
+               <c:out value="${admin.hiBbsTitle}" />
+            </a>
+         </td>
+         <td class="text-center"><c:out value="${admin.userName2}" /></td>
+         <td class="text-center">${admin.regDate}</td>
+         <td class="text-center"><fmt:formatNumber type="number" maxFractionDigits="3" value="${admin.hiBbsReadCnt}" /></td> 
+      </tr>
+     </c:when>
+      <c:otherwise>   
       <tr>
          <td class="text-center">${admin.hiBbsSeq}</td>
          <td>
             <a href="javascript:void(0)" onclick="fn_view(${admin.hiBbsSeq})">
-
-
-
                <c:out value="${admin.hiBbsTitle}" />
             </a>
          </td>
@@ -102,11 +115,13 @@ function popup(){
          <td class="text-center">${admin.regDate}</td>
          <td class="text-center"><fmt:formatNumber type="number" maxFractionDigits="3" value="${admin.hiBbsReadCnt}" /></td>
       </tr>
+      </c:otherwise>
+       </c:choose>
             </c:if>
    </c:forEach>
 </c:if>
 
-
+ <!-- 페이징 처리 --> 
       </tbody>
       <tfoot>
       <tr>
@@ -141,9 +156,9 @@ function popup(){
    if(com.icia.web.util.CookieUtil.getCookie(request, (String)request.getAttribute("AUTH_COOKIE_NAME")) != null)
    {
 %>      
-   <div class="btn-group2">
+<!--    <div class="btn-group2">
       <button type="button" id="btnWrite" class="btn btn-secondary mb-3">글쓰기</button>
-   </div>
+   </div>   -->
 <%
    }
    else

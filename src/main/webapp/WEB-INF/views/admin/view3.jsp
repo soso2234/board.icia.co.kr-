@@ -9,6 +9,7 @@
 <html>
 <head>
 <%@ include file="/WEB-INF/views/include/head.jsp" %>
+<title>게시물 보기</title>
 <script type="text/javascript">
 $(document).ready(function() { 
 <c:choose>
@@ -90,7 +91,7 @@ $(document).ready(function() {
 <c:if test="${!empty admin}">
 <%@ include file="/WEB-INF/views/include/adminNavigation.jsp" %>
 <div class="container">
-   <h2>게시물 보기</h2>
+   <h2 class="list">게시물 보기</h2>
    <div class="row" style="margin-right:0; margin-left:0;">
       <table class="table">
          <thead>
@@ -111,7 +112,7 @@ $(document).ready(function() {
          </thead>
          <tbody>
             <tr>
-               <td colspan="2"><pre><c:out value="${admin.qnaHiBbsContent}" /></pre></td>
+               <td colspan="2"><pre class="name1"><c:out value="${admin.qnaHiBbsContent}" /></pre></td>
             </tr>
          </tbody>
          <tfoot>

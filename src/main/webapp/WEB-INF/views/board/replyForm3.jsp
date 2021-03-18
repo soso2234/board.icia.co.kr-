@@ -2,9 +2,9 @@
 <%@ include file="/WEB-INF/views/include/taglib2.jsp" %>
 <!DOCTYPE html>
 <html>
-<title>댓글</title>
 <head>
 <%@ include file="/WEB-INF/views/include/head.jsp" %>
+<title>게시물 답변</title>
 <script type="text/javascript">
 $(document).ready(function() {
 <c:choose>
@@ -102,7 +102,7 @@ $(document).ready(function() {
 <c:if test="${!empty qna}">
 <%@ include file="/WEB-INF/views/include/teamNavigation.jsp" %>
 <div class="container">
-   <h2>게시물 답변</h2>
+   <h2 class="name">게시물 답변</h2>
    <form name="replyForm3" id="replyForm3" method="post" enctype="multipart/form-data">
       <input type="text" name="userName2" id="userName2" maxlength="20" value="${user2.userName2}" style="ime-mode:active;" class="form-control mt-4 mb-2" placeholder="이름을 입력해주세요." readonly />
       <input type="text" name="userEmail2" id="userEmail2" maxlength="30" value="${user2.userEmail2}"  style="ime-mode:inactive;" class="form-control mb-2" placeholder="이메일을 입력해주세요." readonly />

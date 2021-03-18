@@ -62,7 +62,7 @@ $(document).ready(function() {
               {
                  alert("답변이 완료되었습니다.");                 
                  //location.href = "/admin/view?qnaHiBbsSeq=" + document.adminReplyForm.qnaHiBbsSeq.value;   // 얘는 get방식
-                 document.bbsForm.action = "/admin/view3";   // 얘는 post방식이라서 submit을 쓸때는 action을 반드시 해줘야함
+                 document.bbsForm.action = "/admin/adminCustomerList";   // 얘는 post방식이라서 submit을 쓸때는 action을 반드시 해줘야함
                  document.bbsForm.submit();
               }
               else if(response.code == 400)
@@ -103,7 +103,7 @@ $(document).ready(function() {
 <c:if test="${!empty admin}">
 <%@ include file="/WEB-INF/views/include/adminNavigation.jsp" %>
 <div class="container">
-   <h2>게시물 답변</h2>
+   <h2 class="list">게시물 답변</h2>
    <form name="adminReplyForm" id="adminReplyForm" method="post" enctype="multipart/form-data">
       <input type="text" name="qnaHiBbsTitle" id="qnaHiBbsTitle" maxlength="100" style="ime-mode:active;" value="" class="form-control mb-2" placeholder="제목을 입력해주세요." required />
       <div class="form-group">
@@ -116,7 +116,7 @@ $(document).ready(function() {
       <input type="hidden" name="curPage" value="${curPage}" />
    </form>
    
-   <div class="form-group row">
+   <div class="btn-group2">
       <div class="col-sm-12">
          <button type="button" id="btnReply" class="btn btn-primary" title="답변">답변</button>
          <button type="button" id="btnList" class="btn btn-secondary" title="리스트">리스트</button>

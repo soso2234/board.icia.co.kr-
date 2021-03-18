@@ -64,9 +64,35 @@ public class AdminService
       
   }
   
+  public Admin userSelect(String userId2) {
+     Admin admin = null;
+      
+      try
+      {
+         admin = adminDao.userSelect(userId2);
+      }
+      catch(Exception e)
+      {
+         logger.error("[AdminService] userSelect Exception", e);
+      }
+      
+      return admin;
+  }
+  
   //유저 삭제
   public int userDelete(String userId2) {
-      return (Integer) null;
+     int count = 0;
+     
+    try
+    {
+       count = adminDao.userDelete(userId2);
+    }
+    catch(Exception e)
+    {
+       logger.error("[AdminService] userDelete Exception", e);
+    }
+     
+      return count;
    }
   
 //동행게시판
@@ -169,6 +195,23 @@ public class AdminService
      return count;
   }
   
+  //동행게시판 댓글 삭제
+  @Transactional(propagation=Propagation.REQUIRED, rollbackFor=Exception.class)
+  public int adminReplyDelete(long hiBbsSeq, long hiBbsOrder) throws Exception
+  {
+     int count = 0;
+     
+     Admin parentAdmin = adminView(hiBbsSeq);
+     
+     if(parentAdmin != null)
+     {
+        count = adminDao.adminReplyDelete(parentAdmin);
+        logger.debug("[서비스] 댓삭 게시물 번호 : "+ hiBbsSeq);
+        logger.debug("[댓글순서 order 번호] : "+ hiBbsOrder);
+     }
+     
+     return count;
+  }
   //고객센터 게시판
   public List<Admin> qList(Admin admin)
    {

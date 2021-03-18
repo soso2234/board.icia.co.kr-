@@ -9,35 +9,37 @@
 <html>
 <head>
 <%@ include file="/WEB-INF/views/include/head.jsp" %>
+<title>게시물 보기</title>
 <script type="text/javascript">
 $(document).ready(function() { 
 <c:choose>
-   <c:when test="${empty admin}">
+   <c:when test="${empty qna}">
    alert("조회하신 게시물이 존재하지 않습니다.");
-   document.bbsForm.action = "/admin/adminCustomerList";
+   document.bbsForm.action = "/board/customerList";
    document.bbsForm.submit();
    </c:when>
    <c:otherwise>
 
    $("#btnList").on("click", function() {
-      document.bbsForm.action = "/admin/adminCustomerList";
+      document.bbsForm.action = "/board/customerList";
       document.bbsForm.submit();
    });
    
-   $("#btnReply").on("click", function() {
-      document.bbsForm.action = "/admin/adminReplyForm";
+   
+   <c:if test="${boardMe eq 'Y'}">
+   $("#btnUpdate").on("click", function() {
+      document.bbsForm.action = "/board/updateForm";
       document.bbsForm.submit();
    });
-   
    
    $("#btnDelete").on("click", function(){
       if(confirm("게시물을 삭제 하시겠습니까?") == true)
       {
          $.ajax({
             type : "POST",
-            url : "/admin/adminqListDelete",
+            url : "/board/delete3",
             data : {
-               qnaHiBbsSeq : <c:out value="${admin.qnaHiBbsSeq}" />
+               qnaHiBbsSeq : <c:out value="${qna.qnaHiBbsSeq}" />
             },
             datatype : "JSON",
             beforeSend : function(xhr){
@@ -49,7 +51,7 @@ $(document).ready(function() {
                if(response.code == 0)
                {
                   alert("게시물이 삭제되었습니다.");
-                  location.href = "/admin/adminCustomerList";
+                  location.href = "/board/customerList";
                }
                else if(response.code == 400)
                {
@@ -58,7 +60,7 @@ $(document).ready(function() {
                else if(response.code == 404)
                {
                   alert("게시물을 찾을수 없습니다.");
-                  location.href = "/admin/adminCustomerList";
+                  location.href = "/board/customerList";
                }
                else if(response.code == -999)
                  {
@@ -81,38 +83,47 @@ $(document).ready(function() {
          });
       }
    });
+   </c:if>
    </c:otherwise>
 </c:choose>   
 });
 </script>
 </head>
 <body>
-<c:if test="${!empty admin}">
-<%@ include file="/WEB-INF/views/include/adminNavigation.jsp" %>
+<c:if test="${!empty qna}">
+<%@ include file="/WEB-INF/views/include/teamNavigation.jsp" %>
 <div class="container">
-   <h2>게시물 보기</h2>
+   <h2 class="name">게시물 보기</h2>
    <div class="row" style="margin-right:0; margin-left:0;">
       <table class="table">
          <thead>
             <tr class="table-active" style="color:#939597">
                <th scope="col" style="width:60%">
-                  <c:out value="${admin.qnaHiBbsTitle}" /><br/>
-                  <c:out value="${admin.userName}" />&nbsp;&nbsp;&nbsp;
-                  <a href="mailto:${admin.userEmail}" style="color:#828282;">${admin.userEmail}</a>
-<!--    <c:if test="${!empty qna.qnaHiBoardFile}">
-                  &nbsp;&nbsp;&nbsp;<a href="/board/download?qnaHiBbsSeq=${admin.qnaHiBoardFile.qnaHiBbsSeq}" style="color:#000;">[첨부파일]</a>
-    </c:if>  -->                
+                  <c:out value="${qna.qnaHiBbsTitle}" /><br/>
+                  <c:out value="${qna.userName}" />&nbsp;&nbsp;&nbsp;
+                  <a href="mailto:${qna.userEmail}" style="color:#828282;">${qna.userEmail}</a>
+   <c:if test="${!empty qna.qnaHiBoardFile}">
+                  &nbsp;&nbsp;&nbsp;<a href="/board/download?qnaHiBbsSeq=${qna.qnaHiBoardFile.qnaHiBbsSeq}" style="color:#000;">[첨부파일]</a>
+    </c:if>                
                </th>
                <th scope="col" style="width:40%" class="text-right">
-                  조회 : <fmt:formatNumber type="number" maxFractionDigits="3" value="${admin.qnaHiBbsReadCnt}" /><br/>
-                  ${admin.regDate}
+                  조회 : <fmt:formatNumber type="number" maxFractionDigits="3" value="${qna.qnaHiBbsReadCnt}" /><br/>
+                  ${qna.regDate}
                </th>
             </tr>
          </thead>
          <tbody>
+         <c:if test="${boardMe eq 'Y'}">
             <tr>
-               <td colspan="2"><pre><c:out value="${admin.qnaHiBbsContent}" /></pre></td>
+               <td colspan="2"><pre class="name1"><c:out value="${qna.qnaHiBbsContent}" /></pre></td>
             </tr>
+          </c:if>  
+          <c:if test="${qna.qnaHiBbsSeq eq 9999}">
+       
+               <td colspan="2"><pre class="name1"><c:out value="${qna.qnaHiBbsContent}" /></pre></td>
+          
+       
+          </c:if>
          </tbody>
          <tfoot>
          <tr>
@@ -124,15 +135,16 @@ $(document).ready(function() {
 
    
    <!-- btn-group은 색상 -->
-   <div class="btn-group2">
+   <div class="btn-group">
+   <div class="col-sm-12">
    <button type="button" id="btnList" class="btn btn-secondary">리스트</button>
-
-   <button type="button" id="btnReply" class="btn btn-secondary">답변</button>
   
+   <c:if test="${boardMe eq 'Y'}">
    <button type="button" id="btnDelete" class="btn btn-secondary">삭제</button>
-
+   </c:if>
    <br/>
    <br/>
+   </div>
 </div>
 </c:if>
 </div>

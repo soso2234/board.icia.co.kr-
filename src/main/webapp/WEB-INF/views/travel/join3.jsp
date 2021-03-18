@@ -29,13 +29,13 @@
 <body>   
 <!-- 장소 키워드/검색 -->
 <div class="map_wrap">
-    <div id="map" style="width:100%;height:100%;position:relative;overflow:hidden;"></div>
+    <div id="map" style="width:100%;height:130%;position:relative;overflow:hidden;"></div>
     <div id="menu_wrap" class="bg_white">
         <div class="option">
             <div>
                 <form onsubmit="searchPlaces(); return false;">
-                    키워드 : <input type="text" value="인천" id="keyword" size="15"> 
-                       <button type="submit">검색하기</button> 
+                    키워드 : <input type="text" value="서울" id="keyword" size="15"> 
+                       <button id="btn1" type="submit">검색하기</button>
                 </form>
             </div>
         </div>
@@ -260,11 +260,11 @@
    function displayInfowindow(marker, title) {
    
       var content = '<div style="padding:5px;z-index:1; width:200px;">' + title + '<br>' +
-       '<button id="btn1">일정 추가</button></div>';
+       '<button id="btn2" class="btn btn-outline-warning">일정 추가</button>';
        infowindow.setContent(content);
        infowindow.open(map, marker);
        
-       document.getElementById('btn1').onclick = function() {select2()};
+       document.getElementById('btn2').onclick = function() {select2()};
        document.getElementById('day1').onclick = function() {day1()};
        document.getElementById('day2').onclick = function() {day2()};
        document.getElementById('day3').onclick = function() {day3()};
@@ -286,7 +286,7 @@
             const newRow = table.insertRow(-1);
             
             const newCell1 = newRow.insertCell(0);
-            newCell1.innerText = title;
+            newCell1.innerText = title.replace(" ","");					//pPlaca 공백제거
             newCell1.className = "rowrow1";
            
  
@@ -298,8 +298,8 @@
             const newRow = table.insertRow(-1);
             
             const newCell1 = newRow.insertCell(0);
-            newCell1.className = "rowrow2";
-            newCell1.innerText = title;       
+            newCell1.innerText = title.replace(" ",""); 
+            newCell1.className = "rowrow2";      
           }
             
           else if(check3)
@@ -308,8 +308,8 @@
             const newRow = table.insertRow(-1);
             
             const newCell1 = newRow.insertCell(0);
+            newCell1.innerText = title.replace(" ","");
             newCell1.className = "rowrow3";
-            newCell1.innerText = title; 
           }
           
           else if(check4)
@@ -318,8 +318,8 @@
             const newRow = table.insertRow(-1);
             
             const newCell1 = newRow.insertCell(0);
+            newCell1.innerText = title.replace(" ","");
             newCell1.className = "rowrow4";
-            newCell1.innerText = title; 
           }
           
           else if(check5)
@@ -328,8 +328,8 @@
             const newRow = table.insertRow(-1);
             
             const newCell1 = newRow.insertCell(0);
+            newCell1.innerText = title.replace(" ","");
             newCell1.className = "rowrow5";
-            newCell1.innerText = title; 
           }
           
           else if(check6)
@@ -338,8 +338,8 @@
             const newRow = table.insertRow(-1);
             
             const newCell1 = newRow.insertCell(0);
+            newCell1.innerText = title.replace(" ","");
             newCell1.className = "rowrow6";
-            newCell1.innerText = title; 
           }
           
           else if(check7)
@@ -348,8 +348,8 @@
             const newRow = table.insertRow(-1);
             
             const newCell1 = newRow.insertCell(0);
+            newCell1.innerText = title.replace(" ","");
             newCell1.className = "rowrow7";
-            newCell1.innerText = title; 
           }
           
           else if(check8)
@@ -358,8 +358,8 @@
             const newRow = table.insertRow(-1);
             
             const newCell1 = newRow.insertCell(0);
+            newCell1.innerText = title.replace(" ","");
             newCell1.className = "rowrow8";
-            newCell1.innerText = title; 
           }
           
           else if(check9)
@@ -368,8 +368,8 @@
             const newRow = table.insertRow(-1);
             
             const newCell1 = newRow.insertCell(0);
+            newCell1.innerText = title.replace(" ","");
             newCell1.className = "rowrow9";
-            newCell1.innerText = title; 
           }
           
           else if(check10)
@@ -378,8 +378,8 @@
             const newRow = table.insertRow(-1);
             
             const newCell1 = newRow.insertCell(0);
+            newCell1.innerText = title.replace(" ","");
             newCell1.className = "rowrow10";
-            newCell1.innerText = title; 
           }
    
        }
@@ -818,10 +818,22 @@ $(document).ready(function() {
         document.plan.location10.value = place.get("str9");
 
         document.plan.action = "/planDate/planInsert2";
+       
         document.plan.submit();
    });
 
 });
+////////
+// 일반 지도와 스카이뷰로 지도 타입을 전환할 수 있는 지도타입 컨트롤을 생성합니다
+var mapTypeControl = new kakao.maps.MapTypeControl();
+
+// 지도에 컨트롤을 추가해야 지도위에 표시됩니다
+// kakao.maps.ControlPosition은 컨트롤이 표시될 위치를 정의하는데 TOPRIGHT는 오른쪽 위를 의미합니다
+map.addControl(mapTypeControl, kakao.maps.ControlPosition.TOPRIGHT);
+
+// 지도 확대 축소를 제어할 수 있는  줌 컨트롤을 생성합니다
+var zoomControl = new kakao.maps.ZoomControl();
+map.addControl(zoomControl, kakao.maps.ControlPosition.RIGHT);
 </script>
 
 <!-- 검색창 왼쪽 -->
@@ -832,35 +844,33 @@ $(document).ready(function() {
    for(i=1;i<=(pEnd1-pStart1)+1;i++)
    {
 %>
-   <table id="pPlace<%=i%>">
+   <table id="pPlace<%=i%>"> 
       <tr>
-         <th><button id="day<%=i%>" class="row<%=i%>">Day<%=i %></button> </th>
-         <th><input type='button' class="row<%=i%>" value='일정 삭제' onclick='deleteRow<%=i %>(0)' /></th>
+         <th><div class="btn-group_option"><button id="day<%=i%>" class="row<%=i%>">Day<%=i %></button></div></th>
+         <td class="rowAdd"><div class="btn-group_option"><button class="row<%=i%>" onclick='deleteRow<%=i %>(0)'>일정삭제</button></div></td>
       </tr>
    </table>
 <%
    }      
 %>
-    </div>
+    <form name="plan" id="plan" method="post" target="_self">
+    
+         <center><div class="btn-group_submit"><button id="btnValue">완료</button></div></center>
 </div>
-<form name="plan" id="plan" method="post" target="_self">
-   <input type="button" id="btnValue" class="btnValue" value="버튼" />
 
    <input type="hidden" id="pNoSeq" name="pNoSeq" value="${pNoSeq}" />
    <input type="hidden" id="pStart" name="pStart" value="${pStart}" />
    <input type="hidden" id="pEnd" name="pEnd" value="${pEnd}" />
    <input type="hidden" id="pTitle" name="pTitle" value="${pTitle}" />
-   <input type="hidden" id="location1" name="location1" value="" />
-   <input type="hidden" id="location2" name="location2" value="" />
-   <input type="hidden" id="location3" name="location3" value="" />
-   <input type="hidden" id="location4" name="location4" value="" />
-   <input type="hidden" id="location5" name="location5" value="" />
-   <input type="hidden" id="location6" name="location6" value="" />
-   <input type="hidden" id="location7" name="location7" value="" />
-   <input type="hidden" id="location8" name="location8" value="" />
-   <input type="hidden" id="location9" name="location9" value="" />
-   <input type="hidden" id="location10" name="location10" value="" />
    
+ <%
+ 	for(i=1; i<=10; i++){
+ %>
+   <input type="hidden" id="location<%=i %>" name="location<%=i %>" value="" />
+<%
+}
+%> 
+  
 <% 
    for(i=1; i<=(pEnd1-pStart1)+1; i++) 
    {
@@ -870,6 +880,5 @@ $(document).ready(function() {
    }
 %>
 </form>
-
 </body>
 </html>

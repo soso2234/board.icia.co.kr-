@@ -1,62 +1,44 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-<%@ include file="/WEB-INF/views/include/taglib2.jsp" %>
-<%! int i=1; %>
-
-
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+   pageEncoding="UTF-8"%>
+<%@ include file="/WEB-INF/views/include/taglib2.jsp"%>
+<%!int i = 1;%>
 <!DOCTYPE html>
 <html>
-<%@ include file="/WEB-INF/views/include/head.jsp" %>
-<!-- navigation -->
-<%@ include file="/WEB-INF/views/include/teamNavigation.jsp" %>
+<%@ include file="/WEB-INF/views/include/head.jsp"%>
 <title>나의 일정</title>
+<script type="text/javascript">
+function fn_view(pNoSeq2,pTitle)
+	{
+	   document.myPlanForm.pNoSeq2.value = pNoSeq2;
+	   document.myPlanForm.pTitle.value = pTitle;
+	   document.myPlanForm.action = "/board2/myPlanView";
+	   document.myPlanForm.submit();
+	}
+</script>
 
 <body>
-<div class="container">
-    
-    <div  class="form-group">
-       <h1 align ="center">나의 일정</h1>
-    </div>
-    
-    <div class="row mt-2">
-        <div class="col-12">
-            
-            <form name="myPlan" id="myPlan" method="post" action="/" target="_blank">
-            <table border="1" bordercolor="black" width ="1000" height="500" align = "center" >
-            
-                <tr bgcolor="white" align ="center">
-                           <td colspan="2">${pTitle}</td>
-                           
-                </tr>
-                
-                <tr align = "center" bgcolor="white">
-                           <td>날짜</td>
-                           <td>일정</td>
-                </tr>
-                
-                
-<c:if test="${!empty planlist}">                       
-   <c:forEach var="planDate" items="${planlist}" varStatus="status">
-
-    <tr align = "center" bgcolor="white">
-          <td>${planDate.pDay}</td>
-          
-          <td>
-
-         ${planDate.pPlace}
-
-          </td>
-    </tr>
-    </c:forEach>
-</c:if>                          
-                          
-                        
-                
-
-            </table>
-            </form>   
-        </div>
-    </div>
-</div>
-
+<!-- navigation -->
+<%@ include file="/WEB-INF/views/include/teamNavigation.jsp"%>
+<section class="section">
+	<div class="container">
+		<div class="form-group"><h1 align="center">나의 일정</h1></div>
+		<div id="portfolio-grid" class="row no-gutter" data-aos="fade-up" data-aos-delay="200">
+	         <c:if test="${!empty planlist2}">
+	            <c:forEach var="planMake" items="${planlist2}"   varStatus="status">
+	               <div class="item travel col-sm-6 col-md-4 col-lg-4 mb-4">
+	                  <a href="javascript:void(0)" onclick="fn_view(${planMake.pNoSeq2},'${planMake.pTitle}')" class="item-wrap fancybox">
+	                     <div class="work-info"><br><h1>${planMake.pTitle}</h1></div> 
+	                     <img class="img-fluid" src="/resources/images/globe.png">
+	                  </a>
+	               </div>         
+	            </c:forEach>
+	         </c:if>
+	      </div>
+      </div>
+   </section>
+<form name="myPlanForm" id="myPlanForm" method="post">
+	<input type="hidden" name="pNoSeq2" value="" />
+	<input type="hidden" name="pTitle" value="" />
+</form>
 </body>
 </html>

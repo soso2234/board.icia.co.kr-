@@ -16,4 +16,6 @@ public interface PlanMakeDao {
    
    
    public List<PlanMake> planList(PlanMake planMake);
+   
+   public int planDelete(long pNoSeq);
 }

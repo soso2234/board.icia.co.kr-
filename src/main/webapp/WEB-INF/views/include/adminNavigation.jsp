@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ include file="/WEB-INF/views/include/taglib2.jsp" %>
+<%@ include file="/WEB-INF/views/include/head.jsp" %>
 <script>
    function except(){
       alert("로그인 후 이용가능합니다.");
@@ -41,9 +42,6 @@
        <ul class="nav navbar-nav navbar-right">  
          <li class="nav-item">
            <a class="nav-link" href="index">로그인</a>
-         </li>
-         <li class="nav-item">
-           <a class="nav-link" href="/admin/adminCustomerList">고객센터</a>
          </li>
        </ul>
      </div>

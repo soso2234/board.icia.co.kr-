@@ -45,7 +45,7 @@
 %>
        <ul class="nav navbar-nav navbar-right">  
          <li class="nav-item">
-           <a class="nav-link" href="index">로그인</a>
+           <a class="nav-link" href="/index">로그인</a>
          </li>
          
          <li class="nav-item">

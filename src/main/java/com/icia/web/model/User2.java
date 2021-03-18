@@ -1,13 +1,23 @@
 package com.icia.web.model;
 
 import java.io.Serializable;
+import java.util.HashMap;
+import java.util.Map;
 
+import org.apache.ibatis.session.SqlSession;
+
+/**
+ * @author ahneunhee
+ *
+ */
 public class User2 implements Serializable
 {
 	private static final long serialVersionUID = 3590858770663735301L;
+	SqlSession sqlSession;
 	
 	private String userId2;    // 사용자 아이디
 	private String userPwd2;   // 비밀번호
+	private String userPwd3;	//비밀번호확인
 	private String userName2;  // 사용자 명
 	private String userEmail2; // 사용자 이메일 
 	private String status2;    // 상태 ("Y":사용, "N":정지)
@@ -45,7 +55,14 @@ public class User2 implements Serializable
 	public void setUserPwd2(String userPwd2) {
 		this.userPwd2 = userPwd2;
 	}
+	public String getUserPwd3() {
+		return userPwd3;
+	}
 
+	public void setUserPwd3(String userPwd3) {
+		this.userPwd3 = userPwd3;
+	}
+	
 	public String getUserName2() {
 		return userName2;
 	}
@@ -93,8 +110,15 @@ public class User2 implements Serializable
 	public void setUserBirth2(String userBirth2) {
 		this.userBirth2 = userBirth2;
 	}
+	
+	
 
 
+	/*추가한 부분*/
+	/*회원정보삭제처리*/
+	public void userDelete(String userId2) {
+		sqlSession.update("User2.deleteUser2",userId2);
+	}
 	
 
 

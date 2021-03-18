@@ -28,7 +28,7 @@ public class AdminImpl implements AdminDao{
    
    //회원 강제탈퇴
    @Override
-   public void adminDelete(Admin admin) throws Exception{
+   public void adminDelete(Admin admin){
       sqlSession.delete("admin.adminDelete", admin);
    }
 
@@ -91,6 +91,24 @@ public int adminqListDelete(long qnaHiBbsSeq) {
 public int adminReplyInsert(Admin admin) {
    // TODO Auto-generated method stub
    return 0;
+}
+
+@Override
+public int adminReplyDelete(Admin admin) {
+   // TODO Auto-generated method stub
+   return 0;
+}
+
+@Override
+public Admin userSelect(String userId2) {
+	// TODO Auto-generated method stub
+	return null;
+}
+
+@Override
+public int userDelete(String userId2) {
+	// TODO Auto-generated method stub
+	return 0;
 }
     
 }

@@ -56,5 +56,5 @@ public interface HiBoardDao
    public List<HiBoard> boardReplyList(HiBoard hiBoard);
    
    //게시물 답글 삭제
-   public int boardReplyDelete(long hiBbsSeq);
+   public int boardReplyDelete(HiBoard hiBoard);
 }

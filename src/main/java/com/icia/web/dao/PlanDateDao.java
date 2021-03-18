@@ -6,6 +6,7 @@ import java.util.List;
 
 import org.springframework.stereotype.Repository;
 
+import com.icia.web.model.HiBoard;
 import com.icia.web.model.PlanDate;
 import com.icia.web.model.PlanMake;
 
@@ -16,7 +17,13 @@ public interface PlanDateDao
    public int planDateInsert2(PlanDate planDate); 
    
    //일정조회(myPlan)
-   public PlanDate planDateSelect2(String userId2);
+   public PlanDate planDateSelect2(long pNoSeq2);
    
+   //myPlan
    public List<PlanDate> planList(PlanDate planDate);
+   
+   //myPlanView
+   public List<PlanDate> planViewList(PlanDate planDate);
+   
+   public int planDelete(long pNoSeq2);
 }

@@ -26,11 +26,12 @@ import com.icia.common.util.StringUtil;
 import com.icia.web.model.HiBoard;
 import com.icia.web.model.HiBoardFile;
 import com.icia.web.model.Paging;
+import com.icia.web.model.PlanDate;
 import com.icia.web.model.Response;
 
 import com.icia.web.model.User2;
 import com.icia.web.service.HiBoardService;
-
+import com.icia.web.service.PlanDateService;
 import com.icia.web.service.UserService2;
 import com.icia.web.util.CookieUtil;
 import com.icia.web.util.HttpUtil;
@@ -56,6 +57,9 @@ public class HiBoardController
    @Autowired
    private UserService2 userService2;
    
+   @Autowired
+   private PlanDateService planDateService;
+
    private static final int LIST_COUNT = 10;
    private static final int PAGE_COUNT = 10;
    
@@ -530,88 +534,195 @@ public class HiBoardController
    
    
    
-   //게시물 쓰기
-   @RequestMapping(value="/board/writeForm")
-   public String writeForm(ModelMap model, HttpServletRequest request, HttpServletResponse response)
-   {
-      //쿠키값
-      String cookieUserId = CookieUtil.getHexValue(request, AUTH_COOKIE_NAME);
-      String searchType = HttpUtil.get(request, "searchType");
-      String searchValue = HttpUtil.get(request, "searchValue");
-      long curPage = HttpUtil.get(request, "curPage", (long)1);
-      
-      //사용자 정보 조회
-      User2 user2 = userService2.userSelect2(cookieUserId);      //사용자 인증단에서 이미 검증되고 넘어온거임
-      
-      model.addAttribute("searchType", searchType);
-      model.addAttribute("searchValue", searchValue);
-      model.addAttribute("curPage", curPage);
-      model.addAttribute("user2", user2);
-      
-      return "/board/writeForm";
-   }
-   
-   //게시물 등록
-   @RequestMapping(value="/board/writeProc", method=RequestMethod.POST)
-   @ResponseBody
-   public Response<Object> writeProc(MultipartHttpServletRequest request, HttpServletResponse response)
-   {
-      String cookieUserId = CookieUtil.getHexValue(request, AUTH_COOKIE_NAME);
-      String hiBbsTitle = HttpUtil.get(request, "hiBbsTitle", "");
-      String hiBbsContent = HttpUtil.get(request, "hiBbsContent", "");
-      FileData fileData = HttpUtil.getFile(request, "hiBbsFile", UPLOAD_SAVE_DIR);
-      
-      Response<Object> ajaxResponse = new Response<Object>();
-      
-      if(!StringUtil.isEmpty(hiBbsTitle) && !StringUtil.isEmpty(hiBbsContent))
+      //게시물 쓰기
+      @RequestMapping(value="/board/writeForm3")
+      public String writeForm(ModelMap model, HttpServletRequest request, HttpServletResponse response)
       {
-         HiBoard hiBoard = new HiBoard();
+         //쿠키값
+         String cookieUserId = CookieUtil.getHexValue(request, AUTH_COOKIE_NAME);
+         String searchType = HttpUtil.get(request, "searchType", "");
+         String searchValue = HttpUtil.get(request, "searchValue", "");
+         long curPage = HttpUtil.get(request, "curPage", (long)1);
          
-         hiBoard.setUserId(cookieUserId);
-         hiBoard.setHiBbsTitle(hiBbsTitle);
-         hiBoard.setHiBbsContent(hiBbsContent);
+         PlanDate planDate = new PlanDate();
          
-         if(fileData != null && fileData.getFileSize() > 0)
+         planDate.setUserId2(cookieUserId);
+         
+         List<PlanDate> planlist = planDateService.planList(planDate);
+         //사용자 정보 조회
+         User2 user2 = userService2.userSelect2(cookieUserId);      //사용자 인증단에서 이미 검증되고 넘어온거임
+         
+         model.addAttribute("searchType", searchType);
+         model.addAttribute("searchValue", searchValue);
+         model.addAttribute("curPage", curPage);
+         model.addAttribute("user2", user2);
+         model.addAttribute("planlist", planlist);
+         
+         return "/board/writeForm3";
+      }
+      //////////////////////////////////////////////////
+      //일정공유
+      @RequestMapping(value="/board/writeForm")
+      public String writeForm2(ModelMap model, HttpServletRequest request, HttpServletResponse response)
+      {
+         //쿠키값
+         String cookieUserId = CookieUtil.getHexValue(request, AUTH_COOKIE_NAME);
+         String searchType = HttpUtil.get(request, "searchType", "");
+         String searchValue = HttpUtil.get(request, "searchValue", "");
+         long curPage = HttpUtil.get(request, "curPage", (long)1);
+         
+         PlanDate planDate = new PlanDate();
+         
+         planDate.setUserId2(cookieUserId);
+         
+         List<PlanDate> planlist = planDateService.planList(planDate);
+         //사용자 정보 조회
+         User2 user2 = userService2.userSelect2(cookieUserId);      //사용자 인증단에서 이미 검증되고 넘어온거임
+         
+         model.addAttribute("searchType", searchType);
+         model.addAttribute("searchValue", searchValue);
+         model.addAttribute("curPage", curPage);
+         model.addAttribute("user2", user2);
+         model.addAttribute("planlist", planlist);
+         
+         return "/board/writeForm";
+      }
+      
+      //////////////////////////////////////////////////
+      
+      //일정공유
+      @RequestMapping(value="/board/writeProc", method=RequestMethod.POST)
+      @ResponseBody
+      public Response<Object> writeProc(MultipartHttpServletRequest request, HttpServletResponse response)
+      {
+         String cookieUserId = CookieUtil.getHexValue(request, AUTH_COOKIE_NAME);
+         String hiBbsTitle = HttpUtil.get(request, "hiBbsTitle", "");
+         String hiBbsContent = HttpUtil.get(request, "hiBbsContent", "");
+         String plan = HttpUtil.get(request, "plan", "");
+         FileData fileData = HttpUtil.getFile(request, "hiBbsFile", UPLOAD_SAVE_DIR);
+         
+         Response<Object> ajaxResponse = new Response<Object>();
+         
+         logger.debug("++++++++++++++++++++++ plan = [ " + plan + "] +++++++++++++++++++");
+         
+         if(!StringUtil.isEmpty(hiBbsTitle) && !StringUtil.isEmpty(hiBbsContent) && !StringUtil.isEmpty(plan))
          {
-            HiBoardFile hiBoardFile = new HiBoardFile();
+            HiBoard hiBoard = new HiBoard();
             
-            hiBoardFile.setFileName(fileData.getFileName());
-            hiBoardFile.setFileOrgName(fileData.getFileOrgName());
-            hiBoardFile.setFileExt(fileData.getFileExt());
-            hiBoardFile.setFileSize(fileData.getFileSize());
+            hiBoard.setUserId(cookieUserId);
+            hiBoard.setHiBbsTitle(hiBbsTitle);
+            hiBoard.setHiBbsContent(hiBbsContent);
+            hiBoard.setPlan(plan);
             
-            hiBoard.setHiBoardFile(hiBoardFile);
-         }
-         
-         try
-         {
-            if(hiBoardService.boardInsert(hiBoard) > 0)
+            if(fileData != null && fileData.getFileSize() > 0)
             {
-               ajaxResponse.setResponse(0, "Success");
+               HiBoardFile hiBoardFile = new HiBoardFile();
+               
+               hiBoardFile.setFileName(fileData.getFileName());
+               hiBoardFile.setFileOrgName(fileData.getFileOrgName());
+               hiBoardFile.setFileExt(fileData.getFileExt());
+               hiBoardFile.setFileSize(fileData.getFileSize());
+               
+               hiBoard.setHiBoardFile(hiBoardFile);
             }
-            else
+            
+            try
             {
+               if(hiBoardService.boardInsert(hiBoard) > 0)
+               {
+                  ajaxResponse.setResponse(0, "Success");
+               }
+               else
+               {
+                  ajaxResponse.setResponse(500, "Internal Server Error");
+               }
+            }
+            catch(Exception e)
+            {
+               logger.error("[HiBoardController]/board/writeProc Exception", e);
                ajaxResponse.setResponse(500, "Internal Server Error");
             }
          }
-         catch(Exception e)
+         else
          {
-            logger.error("[HiBoardController]/board/writeProc Exception", e);
-            ajaxResponse.setResponse(500, "Internal Server Error");
+            ajaxResponse.setResponse(400, "Bad Request");
          }
+         
+            if(logger.isDebugEnabled())
+            {
+               logger.debug("[HiBoardController] /board/writeProc response\n" + JsonUtil.toJsonPretty(ajaxResponse));
+            }
+         
+         return ajaxResponse;
       }
-      else
+      
+   /////////////////////////////////////////////////////////////
+      
+      //게시물 등록
+      @RequestMapping(value="/board/writeProc2", method=RequestMethod.POST)
+      @ResponseBody
+      public Response<Object> writeProc2(MultipartHttpServletRequest request, HttpServletResponse response)
       {
-         ajaxResponse.setResponse(400, "Bad Request");
+         String cookieUserId = CookieUtil.getHexValue(request, AUTH_COOKIE_NAME);
+         String hiBbsTitle = HttpUtil.get(request, "hiBbsTitle", "");
+         String hiBbsContent = HttpUtil.get(request, "hiBbsContent", "");
+         FileData fileData = HttpUtil.getFile(request, "hiBbsFile", UPLOAD_SAVE_DIR);
+         
+         Response<Object> ajaxResponse = new Response<Object>();
+         
+         logger.debug("++++++++++++++++++++++ writeForm3 = [ " + "writeForm3Error" + "] +++++++++++++++++++");
+         
+         if(!StringUtil.isEmpty(hiBbsTitle) && !StringUtil.isEmpty(hiBbsContent))
+         {
+            HiBoard hiBoard = new HiBoard();
+            
+            hiBoard.setUserId(cookieUserId);
+            hiBoard.setHiBbsTitle(hiBbsTitle);
+            hiBoard.setHiBbsContent(hiBbsContent);
+            
+            if(fileData != null && fileData.getFileSize() > 0)
+            {
+               HiBoardFile hiBoardFile = new HiBoardFile();
+               
+               hiBoardFile.setFileName(fileData.getFileName());
+               hiBoardFile.setFileOrgName(fileData.getFileOrgName());
+               hiBoardFile.setFileExt(fileData.getFileExt());
+               hiBoardFile.setFileSize(fileData.getFileSize());
+               
+               hiBoard.setHiBoardFile(hiBoardFile);
+            }
+            
+            try
+            {
+               if(hiBoardService.boardInsert(hiBoard) > 0)
+               {
+                  ajaxResponse.setResponse(0, "Success");
+               }
+               else
+               {
+                  ajaxResponse.setResponse(500, "Internal Server Error");
+               }
+            }
+            catch(Exception e)
+            {
+               logger.error("[HiBoardController]/board/writeProc2 Exception", e);
+               ajaxResponse.setResponse(500, "Internal Server Error");
+            }
+         }
+         else
+         {
+            ajaxResponse.setResponse(400, "Bad Request");
+         }
+         
+            if(logger.isDebugEnabled())
+            {
+               logger.debug("[HiBoardController] /board/writeProc2 response\n" + JsonUtil.toJsonPretty(ajaxResponse));
+            }
+         
+         return ajaxResponse;
       }
       
-         if(logger.isDebugEnabled())
-         {
-            logger.debug("[HiBoardController] /board/writeProc response\n" + JsonUtil.toJsonPretty(ajaxResponse));
-         }
-      
-      return ajaxResponse;
-   }
+      /////////////////////////////////////////////////////////////
    
    //게시물 리스트
    @RequestMapping(value="/board/list")
@@ -677,7 +788,8 @@ public class HiBoardController
    public Response<Object> ReplyDelete(HttpServletRequest request, HttpServletResponse response)
    {
       String cookieUserId = CookieUtil.getHexValue(request, AUTH_COOKIE_NAME);
-      long hiBbsSeq = HttpUtil.get(request, "hiBbsSeq", (long)0);         //View.jsp에서 ajax를 통해 hiBbsSeq를 요청
+      long hiBbsSeq = HttpUtil.get(request, "hiBbsSeq", (long)0);  
+      //View.jsp에서 ajax를 통해 hiBbsSeq를 요청
       
       Response<Object> ajaxResponse = new Response<Object>();
       
@@ -693,7 +805,7 @@ public class HiBoardController
                {
                  
                                                       
-                     if(hiBoardService.boardReplyDelete(parentHiBoard.getHiBbsSeq()) > 0)
+                     if(hiBoardService.boardReplyDelete(parentHiBoard.getHiBbsSeq(), parentHiBoard.getHiBbsOrder()) > 0)
                      {
                         ajaxResponse.setResponse(0, "Seccess");
                      }
@@ -727,7 +839,11 @@ public class HiBoardController
       if(logger.isDebugEnabled())
          {
             logger.debug("[HiBoardController] /board/replyDelete response\n" + JsonUtil.toJsonPretty(ajaxResponse));
+            
          }
+      //else {
+        //   logger.debug("댓삭 게시물번호 : "+ hiBbsSeq);
+         //}
       
       return ajaxResponse;
       

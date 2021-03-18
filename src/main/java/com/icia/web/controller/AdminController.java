@@ -22,12 +22,14 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.icia.common.util.StringUtil;
 import com.icia.web.model.Response;
+import com.icia.web.model.User2;
 import com.icia.web.dao.AdminDao;
 import com.icia.web.model.Admin;
 import com.icia.web.model.HiBoard;
 import com.icia.web.model.Paging;
 import com.icia.web.service.AdminService;
 import com.icia.web.service.HiBoardService;
+import com.icia.web.service.UserService2;
 import com.icia.web.util.CookieUtil;
 import com.icia.web.util.HttpUtil;
 import com.icia.web.util.JsonUtil;
@@ -50,7 +52,12 @@ public class AdminController
    //서비스 호출   
    @Autowired
    private AdminService adminService;
+   
+   @Autowired
    private HiBoardService hiBoardService;
+   
+   @Autowired
+   private UserService2 userService2;
    
  
    //로그인
@@ -291,6 +298,72 @@ public class AdminController
       return ajaxResponse;
    }
    
+   //게시물 댓글 삭제
+   @RequestMapping(value="/admin/adminReplyDelete", method=RequestMethod.POST)
+   @ResponseBody
+   public Response<Object> AdminReplyDelete(HttpServletRequest request, HttpServletResponse response)
+   {
+      String cookieUserId = CookieUtil.getHexValue(request, AUTH_COOKIE_NAME);
+      long hiBbsSeq = HttpUtil.get(request, "hiBbsSeq", (long)0);  
+      //View.jsp에서 ajax를 통해 hiBbsSeq를 요청
+      
+      Response<Object> ajaxResponse = new Response<Object>();
+      
+      if(hiBbsSeq > 0)
+      {
+         Admin parentAdmin = adminService.testSelect(hiBbsSeq);
+         
+         if(parentAdmin != null)
+         {
+           // if(StringUtil.equals(parentAdmin.getUserId(), cookieUserId))   //현재 로그인 한 아이디와 게시판에 등록되어있는 아이디가 같은지 확인
+           // {
+               try
+               {
+                 
+                                                      
+                     if(adminService.adminReplyDelete(parentAdmin.getHiBbsSeq(), parentAdmin.getHiBbsOrder()) > 0)
+                     {
+                        ajaxResponse.setResponse(0, "Seccess");
+                     }
+                     else
+                     {
+                        ajaxResponse.setResponse(500, "Internal Server Error");
+                     }                  
+                  
+               }
+               catch(Exception e)
+               {
+                  logger.error("[AdminController] /admin/adminReplyDelete Exception", e);
+                  ajaxResponse.setResponse(500, "internal Server Error");
+               }
+           // }
+         /*
+          * else { ajaxResponse.setResponse(400, "Not Found"); }
+          */
+         }
+         else
+         {
+            ajaxResponse.setResponse(400, "Not Found");
+         }
+      }
+      else
+      {
+         ajaxResponse.setResponse(400, "Bad Request");
+      }
+      
+      if(logger.isDebugEnabled())
+         {
+            logger.debug("[AdminController] /admin/adminReplyDelete response\n" + JsonUtil.toJsonPretty(ajaxResponse));
+            
+         }
+      //else {
+        //   logger.debug("댓삭 게시물번호 : "+ hiBbsSeq);
+         //}
+      
+      return ajaxResponse;
+      
+      
+   }
    //고객센터 리스트
    @RequestMapping(value="/admin/adminCustomerList")
    public String adminCustomerList(ModelMap model, HttpServletRequest request, HttpServletResponse response)
@@ -493,47 +566,6 @@ public class AdminController
    
  /*------------------고객센터 proc 끝------------------*/
    
-  
- /*-------------------고객센터 답변 삭제 시작-----------------*//*
-@RequestMapping(value="/admin/adminReplyDelete", method=RequestMethod.POST)
-@ResponseBody
-public Response<Object> adminReplyDelete(HttpServletRequest request, HttpServletResponse response)
-{
-    long qnaHiBbsSeq = HttpUtil.get(request, "qnaHiBbsSeq", (long)0);
-    Response<Object> ajaxResponse = new Response<Object>();
-    
-    if(qnaHiBbsSeq > 0) {
-       Admin qnaHiBbsParent = adminService.qSelect(qnaHiBbsSeq);
-       
-       if(qnaHiBbsParent != null) {
-          try {
-            if(adminService.adminReplyDelete(qnaHiBbsParent.getHiBbsSeq()) > 0) {
-                ajaxResponse.setResponse(0, "Seccess");
-            }else {
-               ajaxResponse.setResponse(500, "Internal Server Error");
-            }
-          }catch(Exception e) {
-                 logger.error("[AdminController] /admin/adminReplyDelete Exception", e);
-                 ajaxResponse.setResponse(500, "internal Server Error");
-          }
-       }else {
-          ajaxResponse.setResponse(400, "Not Found");
-       }
-    }//if qnaHiBbsSeq
-    else {
-       ajaxResponse.setResponse(400, "Bad Request");
-    }
-    
-     if(logger.isDebugEnabled())
-     {
-        logger.debug("[AdminController] /admin/adminReplyDelete response\n" + JsonUtil.toJsonPretty(ajaxResponse));
-     }
-  
-  return ajaxResponse;
-}*/
-   
-/*—————————고객센터 답변 삭제 끝————————*/ 
-   
    
 
    ////////////////////////////////
@@ -546,28 +578,58 @@ public Response<Object> adminReplyDelete(HttpServletRequest request, HttpServlet
    }
    
    //회원 강제탈퇴 버튼 누를 시
-   @RequestMapping("admin/adminDeleteForm")
-   public ModelAndView adminDelete(String userId2) throws Exception{
-      //유저 아이디 강탈하기 위해 담음
-      Admin admin = new Admin();
-      admin.setUserId2(userId2);
+   @RequestMapping(value="/admin/adminDeleteForm", method=RequestMethod.POST)
+   @ResponseBody
+   public Response<Object> adminDelete(HttpServletRequest request, HttpServletResponse response)
+   {
+      String userId2 = HttpUtil.get(request, "userId2", "");         
       
-      //회원탈퇴 체크를 하기 위한 메소드, 탈퇴시키려는 회원의 아이디가 있는지 검사 한 후 result에 저장
-      adminDao.adminDelete(admin);
+      Response<Object> ajaxResponse = new Response<Object>();
       
-      ModelAndView mav = new ModelAndView();
-      
-      if(admin.getUserId2() != null) {   //회원 강탈 성공
-         mav.setViewName("/admin/adminDelete");
-         mav.addObject("message", "회원 강제탈퇴 완료");
+      if(userId2 != null)
+      {
+         Admin admin = adminService.userSelect(userId2);
+         
+         if(admin != null)
+         {
+            
+               try
+               {                                       
+                     if(adminService.userDelete(userId2) > 0)
+                     {
+                        ajaxResponse.setResponse(0, "Seccess");
+                     }
+                     else
+                     {
+                        ajaxResponse.setResponse(500, "Internal Server Error");
+                     }                  
+                  
+               }
+               catch(Exception e)
+               {
+                  logger.error("[AdminController] /admin/delete Exception", e);
+                  ajaxResponse.setResponse(500, "internal Server Error");
+               }
+            
+         }
+         else
+         {
+            ajaxResponse.setResponse(400, "Not Found");
+         }
+      }
+      else
+      {
+         ajaxResponse.setResponse(400, "Bad Request");
       }
       
-      else {
-         //mav.setViewName("/admin/adminDelete");
-         mav.addObject("message", "목록에 없는 회원입니다. 다시 확인 바랍니다.");
-      }
+      if(logger.isDebugEnabled())
+         {
+            logger.debug("[AdminController] /admin/delete response\n" + JsonUtil.toJsonPretty(ajaxResponse));
+         }
       
-      return mav;
+      return ajaxResponse;
+      
+      
    }
 
    

@@ -16,6 +16,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -43,14 +44,15 @@ public class MemberController {
     
     // mailSending 코드
         @RequestMapping( value = "/member/auth.do" , method=RequestMethod.POST )
-        public ModelAndView mailSending(HttpServletRequest request, String e_mail, HttpServletResponse response_email) throws IOException {
+        public ModelAndView mailSending(ModelMap model, HttpServletRequest request, String e_mail, HttpServletResponse response_email) throws IOException {
  
             Random r = new Random();
             int dice = r.nextInt(4589362) + 49311; //이메일로 받는 인증코드 부분 (난수)
             
             String setfrom = "chlgusrms96@gamil.com";
-            String tomail = request.getParameter("e_mail"); // 받는 사람 이메일   
-
+            String tomail = HttpUtil.get(request ,"e_mail", ""); // 받는 사람 이메일   
+            
+            logger.debug("+++++++++++++++++tomail = [ "+ tomail + "] +++++++++++++++++++++");
             
             String title = "회원가입 인증 이메일 입니다."; // 제목
             String content =
@@ -100,6 +102,7 @@ public class MemberController {
             out_email.println("<script>alert('이메일이 발송되었습니다. 인증번호를 입력해주세요.');</script>");
             out_email.flush();
             
+            model.addAttribute("tomail", tomail);
             
             return mv;
             
@@ -116,8 +119,11 @@ public class MemberController {
     //내가 입력한 인증번호와 메일로 입력한 인증번호가 맞는지 확인해서 맞으면 회원가입 페이지로 넘어가고,
     //틀리면 다시 원래 페이지로 돌아오는 메소드
     @RequestMapping(value = "/member/join_injeung.do{dice}", method = RequestMethod.POST)
-    public ModelAndView join_injeung(String email_injeung, @PathVariable String dice, HttpServletResponse response_equals, HttpServletRequest request) throws IOException {
+    public ModelAndView join_injeung(ModelMap model, String email_injeung, @PathVariable String dice, HttpServletResponse response_equals, HttpServletRequest request) throws IOException {
 
+       String tomail = HttpUtil.get(request, "tomail", "");
+       
+       logger.debug("+++++++++++++++++tomail = ["+ tomail + "] +++++++++++++++++++++");
        
        String check = "N";
        
@@ -156,6 +162,8 @@ public class MemberController {
             out_equals.flush();
     
             check = "Y";
+            model.addAttribute("tomail", tomail);
+            
             return mv;
             
             
@@ -175,7 +183,9 @@ public class MemberController {
             return mv2;
             
         }    
-    
+        
+        
+        
         return mv;
         
     }

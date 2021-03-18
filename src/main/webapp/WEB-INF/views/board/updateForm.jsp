@@ -1,13 +1,14 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-<%@ include file="/WEB-INF/views/include/taglib2.jsp" %>
+<%@ include file="/WEB-INF/views/include/taglib.jsp" %>
 <!DOCTYPE html>
 <html>
 <head>
 <%@ include file="/WEB-INF/views/include/head.jsp" %>
+<title>게시물 수정</title>
 <script type="text/javascript">
 $(document).ready(function() {
 <c:choose>
-   <c:when test="${empty hiBoard}">
+   <c:when test="${empty hiBoard}"> //hiBoard는 컨트롤러에서 넘기는 것
 
    alert("게시물이 존재하지 않습니다.");
    location.href = "/board/list";
@@ -59,10 +60,6 @@ $(document).ready(function() {
               {
                  alert("게시물이 수정되었습니다.");
                  location.href = "/board/list";
-                 /*
-                 document.bbsForm.action = "/board/list";
-               document.bbsForm.submit();
-                 */
               }
               else if(response.code == 400)
               {
@@ -100,12 +97,12 @@ $(document).ready(function() {
 </head>
 <body>
 <c:if test="${!empty hiBoard}">
-<%@ include file="/WEB-INF/views/include/navigation.jsp" %>
+<%@ include file="/WEB-INF/views/include/teamNavigation.jsp" %>
 <div class="container">
-   <h2>게시물 수정</h2>
+   <h2 class="name">게시물 수정</h2>
    <form name="updateForm" id="updateForm" method="post" enctype="multipart/form-data">
-      <input type="text" name="userName" id="userName" maxlength="20" value="${user.userName}" style="ime-mode:active;" class="form-control mt-4 mb-2" placeholder="이름을 입력해주세요." readonly />
-      <input type="text" name="userEmail" id="userEmail" maxlength="30" value="${user.userEmail}"  style="ime-mode:inactive;" class="form-control mb-2" placeholder="이메일을 입력해주세요." readonly />
+      <input type="text" name="userName" id="userName" maxlength="20" value="${user2.userName2}" style="ime-mode:active;" class="form-control mt-4 mb-2" placeholder="이름을 입력해주세요." readonly />
+      <input type="text" name="userEmail" id="userEmail" maxlength="30" value="${user2.userEmail2}"  style="ime-mode:inactive;" class="form-control mb-2" placeholder="이메일을 입력해주세요." readonly />
       <input type="text" name="hiBbsTitle" id="hiBbsTitle" maxlength="100" style="ime-mode:active;" value="${hiBoard.hiBbsTitle}" class="form-control mb-2" placeholder="제목을 입력해주세요." required />
       <div class="form-group">
          <textarea class="form-control" rows="10" name="hiBbsContent" id="hiBbsContent" style="ime-mode:active;" placeholder="내용을 입력해주세요" required>${hiBoard.hiBbsContent}</textarea>
@@ -120,7 +117,7 @@ $(document).ready(function() {
       <input type="hidden" name="curPage" value="${curPage}" />
    </form>
    
-   <div class="form-group row">
+   <div class="btn-group">
       <div class="col-sm-12">
          <button type="button" id="btnUpdate" class="btn btn-primary" title="수정">수정</button>
          <button type="button" id="btnList" class="btn btn-secondary" title="리스트">리스트</button>

@@ -11,7 +11,7 @@ $(document).ready(function() {
    $("#btnWrite").on("click", function() {
       
       document.bbsForm.hiBbsSeq.value = "";
-      document.bbsForm.action = "/board/writeForm";
+      document.bbsForm.action = "/board/writeForm3";
       document.bbsForm.submit();
       
    });
@@ -54,46 +54,62 @@ function popup(){
 <body>
 <%@ include file="/WEB-INF/views/include/teamNavigation.jsp" %>
 <div class="container">
-   
-   <div class="d-flex">
-      <div style="width:50%;">
-         <h2>게시판</h2>
-      </div>
-      <div class="ml-auto input-group" style="width:50%;">
-         <select name="_searchType" id="_searchType" class="custom-select" style="width:auto;">
-            <option value="">조회 항목</option>
-            <option value="1" <c:if test="${searchType eq '1'}">selected</c:if>>작성자</option>
-            <option value="2" <c:if test="${searchType eq '2'}">selected</c:if>>제목</option>
-            <option value="3" <c:if test="${searchType eq '3'}">selected</c:if>>내용</option>
-         </select>
-         <input type="text" name="_searchValue" id="_searchValue" value="${searchValue}" class="form-control mx-1" maxlength="20" style="width:auto;ime-mode:active;" placeholder="조회값을 입력하세요." />
-         <div class="btn-group">
-            <button type="button" id="btnSearch" class="btn btn-secondary mb-3 mx-1">조회</button>
-         </div>
-      </div>
-    </div>
+
+  <!-- 위 테이블 조회항목 -->  
+  <div class="d-flex">
+     <div style="width:50%;">
+        <h2 class="name">동행게시판</h2>
+     </div>
+     <div class="ml-auto input-group" style="width:50%;">
+        <select name="_searchType" id="_searchType" class="custom-select" style="width:auto;">
+           <option value="">조회 항목</option>
+           <option value="1" <c:if test="${searchType eq '1'}">selected</c:if>>작성자</option>
+           <option value="2" <c:if test="${searchType eq '2'}">selected</c:if>>제목</option>
+           <option value="3" <c:if test="${searchType eq '3'}">selected</c:if>>내용</option>
+        </select>
+        <input type="text" name="_searchValue" id="_searchValue" value="${searchValue}" class="form-control mx-1" maxlength="20" style="width:auto;ime-mode:active;" placeholder="조회값을 입력하세요." />
+        <div class="btn-group">
+           <button type="button" id="btnSearch" class="btn btn-secondary mb-3 mx-1">조회</button>
+        </div>
+     </div>
+   </div>
     
+  <!-- 게시판 table head-->     
    <table class="table table-hover">
-      <thead>
-      <tr style="background-color: #F5dF4D;">
-         <th scope="col" class="text-center" style="width:10%">번호</th>
-         <th scope="col" class="text-center" style="width:55%">제목</th>
-         <th scope="col" class="text-center" style="width:10%">작성자</th>
-         <th scope="col" class="text-center" style="width:15%">날짜</th>
-         <th scope="col" class="text-center" style="width:10%">조회수</th>
-      </tr>
-      </thead>
-      <tbody>
+    <thead>
+    <tr style="background-color: #F5dF4D;">
+       <th scope="col" class="text-center" style="width:10%">번호</th>
+       <th scope="col" class="text-center" style="width:55%">제목</th>
+       <th scope="col" class="text-center" style="width:10%">작성자</th>
+       <th scope="col" class="text-center" style="width:15%">날짜</th>
+       <th scope="col" class="text-center" style="width:10%">조회수</th>
+    </tr>
+    </thead>
+    <tbody>
+    
+ <!-- 게시판 body -->
 <c:if test="${!empty list}">   
    <c:forEach var="hiBoard" items="${list}" varStatus="status">  
          <c:if test="${hiBoard.hiBbsIndent == 0}"> 
+       <c:choose>
+      <c:when test="${hiBoard.hiBbsSeq eq 9999}"> 
       <tr>
-         <td class="text-center">${hiBoard.hiBbsSeq}</td>
+      <th class="text-center">공지사항</th>
+               <td>
+            <a href="javascript:void(0)" onclick="fn_view(${hiBoard.hiBbsSeq})">
+               <c:out value="${hiBoard.hiBbsTitle}" />
+            </a>
+         </td>
+         <td class="text-center"><c:out value="${hiBoard.userName}" /></td>
+         <td class="text-center">${hiBoard.regDate}</td>
+         <td class="text-center"><fmt:formatNumber type="number" maxFractionDigits="3" value="${hiBoard.hiBbsReadCnt}" /></td> 
+      </tr>
+     </c:when>
+      <c:otherwise>
+      <tr>
+      <td class="text-center">${hiBoard.hiBbsSeq}</td>
          <td>
             <a href="javascript:void(0)" onclick="fn_view(${hiBoard.hiBbsSeq})">
-
-
-
                <c:out value="${hiBoard.hiBbsTitle}" />
             </a>
          </td>
@@ -101,9 +117,13 @@ function popup(){
          <td class="text-center">${hiBoard.regDate}</td>
          <td class="text-center"><fmt:formatNumber type="number" maxFractionDigits="3" value="${hiBoard.hiBbsReadCnt}" /></td>
       </tr>
+      </c:otherwise>
+      </c:choose>
             </c:if>
    </c:forEach>
 </c:if>
+
+<!-- 페이징처리 -->
       </tbody>
       <tfoot>
       <tr>
@@ -113,25 +133,25 @@ function popup(){
    </table>
    <nav>
       <ul class="pagination justify-content-center">
-<c:if test="${!empty paging}">
-   <c:if test="${paging.prevBlockPage gt 0 }">
-         <li class="page-item"><a class="page-link" href="javascript:void(0)" onclick="fn_list(${paging.prevBlockPage})">이전블럭</a></li>
-   </c:if>
-   
-   <c:forEach var="i" begin="${paging.startPage}" end="${paging.endPage}">
-      <c:choose>
-         <c:when test="${i ne curPage}">
-         <li class="page-item"><a class="page-link" href="javascript:void(0)" onclick="fn_list(${i})">${i}</a></li>
-         </c:when>
-         <c:otherwise>
-         <li class="page-item active"><a class="page-link" href="javascript:void(0)" style="cursor:default;">${i}</a></li>
-         </c:otherwise>
-      </c:choose>
-   </c:forEach>
-   <c:if test="${paging.nextBlockPage gt 0}">
-         <li class="page-item"><a class="page-link" href="javascript:void(0)" onclick="fn_list(${paging.nextBlockPage})">다음블럭</a></li>
-   </c:if>
-</c:if>   
+		<c:if test="${!empty paging}">
+		   <c:if test="${paging.prevBlockPage gt 0 }">
+		         <li class="page-item"><a class="page-link" href="javascript:void(0)" onclick="fn_list(${paging.prevBlockPage})">이전블럭</a></li>
+		   </c:if>
+		   
+		   <c:forEach var="i" begin="${paging.startPage}" end="${paging.endPage}">
+		      <c:choose>
+		         <c:when test="${i ne curPage}">
+		         <li class="page-item"><a class="page-link" href="javascript:void(0)" onclick="fn_list(${i})">${i}</a></li>
+		         </c:when>
+		         <c:otherwise>
+		         <li class="page-item active"><a class="page-link" href="javascript:void(0)" style="cursor:default;">${i}</a></li>
+		         </c:otherwise>
+		      </c:choose>
+		   </c:forEach>
+		   <c:if test="${paging.nextBlockPage gt 0}">
+		         <li class="page-item"><a class="page-link" href="javascript:void(0)" onclick="fn_list(${paging.nextBlockPage})">다음블럭</a></li>
+		   </c:if>
+		</c:if>   
       </ul>
    </nav>
 <%
@@ -155,5 +175,6 @@ function popup(){
       <input type="hidden" name="curPage" value="${curPage}" />
    </form>
 </div>
+
 </body>
 </html>

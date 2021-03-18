@@ -20,6 +20,25 @@ public class PlanDateService {
    @Autowired
    private PlanDateDao planDateDao;
    
+   /*조회*/
+   public List<PlanDate> planViewList(PlanDate planDate) {
+      
+      
+         List<PlanDate> planViewlist = null;
+         
+         try
+          {
+            planViewlist = planDateDao.planViewList(planDate);
+          }
+          catch(Exception e)
+          {
+             logger.error("[PlanDateService] planList Exception", e);
+          }
+          
+          return  planViewlist;
+      
+      }
+   
    /*추가*/
    public int planDateInsert2(PlanDate planDate)
    {
@@ -38,12 +57,12 @@ public class PlanDateService {
    }
    
    /*조회*/
-   public PlanDate planDateSelect2(String userId2) {
+  public PlanDate planDateSelect2(long pNoSeq2) {
       PlanDate planDate = null;
       
       try 
       {
-         planDate = planDateDao.planDateSelect2(userId2);       
+         planDate = planDateDao.planDateSelect2(pNoSeq2);       
       }
       catch(Exception e) 
       {
@@ -51,7 +70,9 @@ public class PlanDateService {
       }
       return planDate;
    }
+   
 
+   
    
    public List<PlanDate> planList(PlanDate planDate) {
       List<PlanDate> planlist = null;
@@ -70,4 +91,21 @@ public class PlanDateService {
    }
 
 
+   public int planDelete(long pNoSeq2)
+   {
+      int count = 0;
+      
+      try
+      {
+         count = planDateDao.planDelete(pNoSeq2);
+      }
+      catch(Exception e)
+      {
+         logger.error("[PlanDateService] planDelete Exception", e);
+      }
+      
+      return count;
+   }
+
+   
 }
